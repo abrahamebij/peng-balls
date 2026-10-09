@@ -1,0 +1,28 @@
+# Godot 4 cache and imported assets
+.godot/
+*.translation
+
+# Build outputs
+build/
+*.apk
+*.aab
+
+# Keystores and sensitive credentials
+*.keystore
+*.jks
+
+# Mono / C# (if applicable)
+.mono/
+[Bb]in/
+[Oo]bj/
+
+# System and editor files
+.DS_Store
+Thumbs.db
+*.swp
+*~
+*.tmp
+*.log
+.vscode/
+.idea/
+docs/

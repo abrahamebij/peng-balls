@@ -1,0 +1,50 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://environments/static/wall/Clay001_1K-JPG_Roughness.jpg" type="Texture2D" id=1]
+[ext_resource path="res://environments/static/wall/Clay001_1K-JPG_NormalGL.jpg" type="Texture2D" id=2]
+[ext_resource path="res://environments/static/wall/Clay001_1K-JPG_AmbientOcclusion.jpg" type="Texture2D" id=3]
+
+[sub_resource type="StandardMaterial3D" id=5]
+albedo_color = Color( 0.870588, 0.435294, 0.145098, 1 )
+roughness = 0.85
+roughness_texture = ExtResource( 1 )
+normal_enabled = true
+normal_scale = 16.0
+normal_texture = ExtResource( 2 )
+ao_enabled = true
+ao_light_affect = 0.0
+ao_texture = ExtResource( 3 )
+ao_on_uv2 = false
+ao_texture_channel = 3
+uv1_triplanar = true
+uv1_triplanar_sharpness = 1.0
+uv2_triplanar = true
+uv2_triplanar_sharpness = 1.0
+
+[sub_resource type="BoxMesh" id=4]
+material = SubResource( 5 )
+size = Vector3( 1, 1, 1 )
+
+[sub_resource type="BoxShape3D" id=2]
+extents = Vector3( 0.5, 0.5, 0.5 )
+
+[node name="WallBlock" type="Node3D"]
+transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0 )
+
+[node name="Block 1" type="MeshInstance3D" parent="."]
+transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
+mesh = SubResource( 4 )
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Block 1"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Block 1/StaticBody3D"]
+shape = SubResource( 2 )
+
+[node name="Block 2" type="MeshInstance3D" parent="."]
+transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0 )
+mesh = SubResource( 4 )
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Block 2"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Block 2/StaticBody3D"]
+shape = SubResource( 2 )
