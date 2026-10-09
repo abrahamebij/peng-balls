@@ -15,6 +15,7 @@ extends Control
 
 
 func _ready():
+	visible = false
 	close_btn.pressed.connect(_on_close)
 	wallet_btn.pressed.connect(_on_wallet_toggle)
 	bet_play_btn.pressed.connect(_on_bet_play)
