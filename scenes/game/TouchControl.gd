@@ -122,13 +122,8 @@ func _draw():
 
 func _input(event):
 	# Runs for every input event. Fingers and the mouse use the same helpers.
-	
-	# On a phone, Godot also sends a fake mouse event for every touch, so that
-	# buttons work. We already handle the real touch events, so ignore the fake
-	# mouse ones. On PC the mouse is still used normally.
 	if OS.get_name() == "Android" and (event is InputEventMouseButton or event is InputEventMouseMotion):
 		return
-
 
 	# A finger touched or lifted.
 	if event is InputEventScreenTouch:
@@ -150,22 +145,21 @@ func _input(event):
 
 	# The mouse moved.
 	elif event is InputEventMouseMotion:
-		_drag(MOUSE_ID, event.position, event.relative)
+		if joy_id != -1 or look_id != -1:
+			_drag(MOUSE_ID, event.position, event.relative)
 
 
 func _press(id, pos):
 	# Something just pressed down. Decide what it's for.
+	var dist = pos.distance_to(_joy_center())
+	var threshold = _joy_radius() * grab_scale
 
-	if joy_id == -1 and pos.distance_to(_joy_center()) <= _joy_radius() * grab_scale:
-		# On the joystick (and it's free): this one controls MOVEMENT only.
+	if joy_id == -1 and dist <= threshold:
 		joy_id = id
 		_move_knob(pos)
-		# Tell the rest of the game "I've used this input", so nothing else
-		# (like the camera) reacts to it as well.
 		get_viewport().set_input_as_handled()
 
 	elif look_id == -1:
-		# Anywhere else (and the camera is free): this one controls the camera.
 		look_id = id
 
 

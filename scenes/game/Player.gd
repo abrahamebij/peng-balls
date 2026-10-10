@@ -43,10 +43,16 @@ func get_input_vector():
 		if stick.length() > 0.0:
 			return stick
 
-	# 2. Otherwise use the keyboard arrows (handy for testing on PC).
-	return Vector2(
+	# 2. Keyboard arrows and WASD keys (for testing on PC).
+	var kb = Vector2(
 		Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"),
 		Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up"))
+	if kb.length() == 0.0:
+		if Input.is_key_pressed(KEY_W): kb.y -= 1.0
+		if Input.is_key_pressed(KEY_S): kb.y += 1.0
+		if Input.is_key_pressed(KEY_A): kb.x -= 1.0
+		if Input.is_key_pressed(KEY_D): kb.x += 1.0
+	return kb
 
 
 func _physics_process(delta):

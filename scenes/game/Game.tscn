@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cpqqkw5af0am8"]
 
-[ext_resource type="Environment" path="res://environments/clear_blue.tres" id="1"]
-[ext_resource type="PackedScene" path="res://scenes/game/Player.tscn" id="2"]
+[ext_resource type="Environment" uid="uid://cqsx5bmbxw8lf" path="res://environments/clear_blue.tres" id="1"]
+[ext_resource type="PackedScene" uid="uid://564qj0hrofu0" path="res://scenes/game/Player.tscn" id="2"]
 [ext_resource type="Script" uid="uid://cs48xm1incm0g" path="res://scenes/game/Player.gd" id="3"]
 [ext_resource type="MeshLibrary" path="res://environments/tilesets/wallBlocks.meshlib" id="4"]
 [ext_resource type="Script" uid="uid://cjhlrla70gnu5" path="res://scenes/game/GridMap.gd" id="5"]
@@ -10,7 +10,6 @@
 [ext_resource type="PackedScene" path="res://scenes/game/Coin.tscn" id="8"]
 [ext_resource type="PackedScene" path="res://scenes/game/Enemy.tscn" id="9"]
 [ext_resource type="Script" uid="uid://c32u62flrinx8" path="res://scenes/game/TouchControl.gd" id="10"]
-[ext_resource type="PackedScene" path="res://scenes/menu/LeaderboardModal.tscn" id="11"]
 
 [sub_resource type="BoxShape3D" id="1"]
 size = Vector3(120, 1, 120)
@@ -81,20 +80,6 @@ offset_bottom = 38.0
 theme_override_font_sizes/font_size = 18
 text = "Coins: 0 / 0"
 
-[node name="PoolBanner" type="Label" parent="HUD" unique_id=109906504]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -220.0
-offset_top = 12.0
-offset_right = 220.0
-offset_bottom = 38.0
-grow_horizontal = 2
-theme_override_colors/font_color = Color(0.98, 0.78, 0.18, 1)
-theme_override_font_sizes/font_size = 15
-text = "POOL: 0 $SKR | 1st: --:--"
-horizontal_alignment = 1
-
 [node name="TouchControl" type="Control" parent="HUD" unique_id=1329634621]
 layout_mode = 3
 anchors_preset = 15
@@ -159,7 +144,3 @@ text = "Leaderboard"
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Menu"
-
-[node name="LeaderboardModal" parent="HUD" unique_id=927609077 instance=ExtResource("11")]
-visible = false
-layout_mode = 3
