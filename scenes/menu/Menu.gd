@@ -17,7 +17,12 @@ func _ready():
 
 
 func _on_start():
-	get_tree().change_scene_to_file("res://scenes/game/Game.tscn")
+	if ResourceLoader.exists("res://scenes/menu/LoadingScreen.tscn"):
+		if has_node("/root/GlobalState"):
+			get_node("/root/GlobalState").next_scene_path = "res://scenes/game/Game.tscn"
+		get_tree().change_scene_to_file("res://scenes/menu/LoadingScreen.tscn")
+	else:
+		get_tree().change_scene_to_file("res://scenes/game/Game.tscn")
 
 
 func _on_multiplayer():

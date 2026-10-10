@@ -15,6 +15,7 @@ var shorthand_pubkey: String = ""
 var wallet_provider_id: int = -1
 var wallet_provider_name: String = ""
 var sol_balance: float = 0.0
+var next_scene_path: String = ""
 
 # Supported wallet IDs mapped to readable names
 const WALLET_NAMES: Dictionary = {
@@ -91,6 +92,11 @@ func _on_wallet_login_success() -> void:
 		var wallet_svc = solana_service.get_node("WalletService")
 		var key_obj = wallet_svc.get_pubkey()
 		connected_pubkey = _extract_pubkey_string(key_obj)
+		if connected_pubkey.is_empty() and Engine.has_singleton("WalletAdapterAndroid"):
+			var plugin = Engine.get_singleton("WalletAdapterAndroid")
+			var b58: String = str(plugin.call("getConnectedKeyBase58"))
+			if not b58.is_empty():
+				connected_pubkey = b58
 		wallet_provider_id = wallet_svc.get_wallet_provider_id()
 		wallet_provider_name = WALLET_NAMES.get(wallet_provider_id, "Solana Wallet")
 
