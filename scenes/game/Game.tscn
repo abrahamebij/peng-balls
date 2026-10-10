@@ -135,11 +135,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Play Again"
 
-[node name="LeaderboardButton" type="Button" parent="HUD/EndPanel/VBoxContainer/ButtonContainer" unique_id=343882531]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Leaderboard"
-
 [node name="MenuButton" type="Button" parent="HUD/EndPanel/VBoxContainer/ButtonContainer" unique_id=1898643701]
 layout_mode = 2
 size_flags_horizontal = 3

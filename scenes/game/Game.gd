@@ -15,13 +15,10 @@ extends WorldEnvironment
 @onready var player = $Player
 @onready var coin_label = $HUD/CoinLabel
 @onready var time_label = $HUD/TimeLabel
-@onready var pool_banner = $HUD/PoolBanner
 @onready var end_panel = $HUD/EndPanel
 @onready var message = $HUD/EndPanel/VBoxContainer/Message
 @onready var restart_button = $HUD/EndPanel/VBoxContainer/ButtonContainer/RestartButton
-@onready var leaderboard_button = $HUD/EndPanel/VBoxContainer/ButtonContainer/LeaderboardButton
 @onready var menu_button = $HUD/EndPanel/VBoxContainer/ButtonContainer/MenuButton
-@onready var leaderboard_modal = $HUD/LeaderboardModal
 
 # --- Variables ---
 var coins_total = 0
@@ -34,8 +31,6 @@ func _ready():
 	# The HUD must keep working while the game is paused, or the buttons won't click.
 	$HUD.process_mode = Node.PROCESS_MODE_ALWAYS
 	end_panel.visible = false
-	if leaderboard_modal:
-		leaderboard_modal.visible = false
 
 	# Put the player in the starting room.
 	player.global_transform.origin = maze.get_start_position()
@@ -45,21 +40,9 @@ func _ready():
 	_spawn_enemies(start)
 	_spawn_coins(start)
 	_update_label()
-	_update_pool_hud()
 
 	restart_button.connect("pressed", Callable(self, "_on_restart"))
-	leaderboard_button.connect("pressed", Callable(self, "_on_leaderboard_opened"))
 	menu_button.connect("pressed", Callable(self, "_on_menu"))
-
-
-func _update_pool_hud():
-	if not has_node("/root/SolanaPoolManager"):
-		return
-	var mgr = get_node("/root/SolanaPoolManager")
-	var cur_name = mgr.get_active_currency_name()
-	var pot_val = int(mgr.get_active_pot())
-	var best_str = mgr.get_formatted_time(mgr.best_time_ms) if mgr.best_time_ms > 0 else "--:--"
-	pool_banner.text = "POOL: %d %s | 1st: %s" % [pot_val, cur_name, best_str]
 
 
 func _process(delta):
@@ -121,30 +104,10 @@ func _end_game(won: bool):
 	if game_over:
 		return             # only end once
 	game_over = true
-	
-	var pool_info = ""
-	if has_node("/root/SolanaPoolManager"):
-		var mgr = get_node("/root/SolanaPoolManager")
-		mgr.record_run_result(won, time_elapsed)
-		var cur_name = mgr.get_active_currency_name()
-		var pot_val = int(mgr.get_active_pot())
-		var winner_cut = int(pot_val * 0.9)
-		if won:
-			var rank = mgr.get_player_rank()
-			var rank_text = "#" + str(rank) if rank > 0 else "Top 10"
-			pool_info = "\nRank: " + rank_text + " | Pool: " + str(pot_val) + " " + cur_name + "\n(90% 1st Place Payout: " + str(winner_cut) + " " + cur_name + ")"
-		else:
-			pool_info = "\nRun Recorded | Pool: " + str(pot_val) + " " + cur_name
 
-	message.text = ("YOU WIN!" if won else "CAUGHT!") + "\nTime: " + _format_time_precise(time_elapsed) + pool_info
+	message.text = ("YOU WIN!" if won else "CAUGHT!") + "\nTime: " + _format_time_precise(time_elapsed)
 	end_panel.visible = true
 	get_tree().paused = true    # freeze the game behind the panel
-
-
-func _on_leaderboard_opened():
-	if leaderboard_modal:
-		leaderboard_modal.refresh_display()
-		leaderboard_modal.visible = true
 
 
 func _on_restart():
