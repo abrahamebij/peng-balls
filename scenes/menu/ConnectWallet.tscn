@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://cxvjctgkbplx3"]
+
+[ext_resource type="Texture2D" uid="uid://bjqmcgyjuwcr3" path="res://resources/images/panel_plate.jpg" id="1_vp5iu"]
+
+[node name="ConnectWallet" type="Control" unique_id=1028886795]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1671363395]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource("1_vp5iu")
+expand_mode = 1
