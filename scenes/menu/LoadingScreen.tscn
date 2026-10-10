@@ -1,8 +1,9 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://bbx8odwkg4lw0"]
 
 [ext_resource type="Texture2D" uid="uid://dwof2pi5h73j" path="res://resources/images/backdrop_1.jpg" id="1_loading"]
+[ext_resource type="Theme" uid="uid://cs0nt8ifxphb4" path="res://styles/header.tres" id="2_header"]
 
-[node name="LoadingScreen" type="Control"]
+[node name="LoadingScreen" type="Control" unique_id=1517139410]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -10,10 +11,28 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="TextureRect" type="TextureRect" parent="." unique_id=40945503]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 texture = ExtResource("1_loading")
 expand_mode = 1
+
+[node name="Header" type="Label" parent="." unique_id=745959951]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -441.0
+offset_top = 196.0
+offset_right = 43.0
+offset_bottom = 311.0
+grow_horizontal = 2
+theme = ExtResource("2_header")
+theme_override_colors/font_color = Color(0.14117648, 0.1764706, 0.18039216, 1)
+theme_override_colors/font_shadow_color = Color(0.057003886, 0.0773961, 0.0796623, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 100
+text = "Loading"
+horizontal_alignment = 1

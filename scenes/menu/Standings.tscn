@@ -1,8 +1,10 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://cbg0h2jsvwywr"]
 
 [ext_resource type="Texture2D" uid="uid://d23fg65j3ismh" path="res://resources/images/backdrop_2.jpg" id="1_standings"]
+[ext_resource type="Theme" uid="uid://cs0nt8ifxphb4" path="res://styles/header.tres" id="2_header"]
+[ext_resource type="Theme" uid="uid://d2m7psnckibpp" path="res://styles/description.tres" id="3_desc"]
 
-[node name="Standings" type="Control"]
+[node name="Standings" type="Control" unique_id=511682674]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -10,10 +12,48 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1853852558]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 texture = ExtResource("1_standings")
 expand_mode = 1
+
+[node name="Header" type="Label" parent="." unique_id=409646793]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -257.0
+offset_top = 26.0
+offset_right = 227.0
+offset_bottom = 96.0
+grow_horizontal = 2
+theme = ExtResource("2_header")
+theme_override_colors/font_color = Color(0.14117648, 0.1764706, 0.18039216, 1)
+theme_override_colors/font_shadow_color = Color(0.057003886, 0.0773961, 0.0796623, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "Standings"
+horizontal_alignment = 1
+
+[node name="Description" type="Label" parent="." unique_id=578419625]
+custom_minimum_size = Vector2(250, 0)
+custom_maximum_size = Vector2(740, -1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -407.0
+offset_top = -159.0
+offset_right = 333.0
+offset_bottom = -86.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_desc")
+theme_override_colors/font_color = Color(0.14117648, 0.1764706, 0.18039216, 1)
+text = "Current tournament rankings and top verified speedrun times."
+horizontal_alignment = 1
+autowrap_mode = 3

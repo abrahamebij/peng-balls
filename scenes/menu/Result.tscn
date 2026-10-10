@@ -1,8 +1,10 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://bcwl0268ipmt2"]
 
 [ext_resource type="Texture2D" uid="uid://dwof2pi5h73j" path="res://resources/images/backdrop_1.jpg" id="1_result"]
+[ext_resource type="Theme" uid="uid://cs0nt8ifxphb4" path="res://styles/header.tres" id="2_header"]
+[ext_resource type="Theme" uid="uid://d2m7psnckibpp" path="res://styles/description.tres" id="3_desc"]
 
-[node name="Result" type="Control"]
+[node name="Result" type="Control" unique_id=1057781900]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -10,10 +12,47 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="TextureRect" type="TextureRect" parent="." unique_id=492416660]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 texture = ExtResource("1_result")
 expand_mode = 1
+
+[node name="Header" type="Label" parent="." unique_id=597857587]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -385.0
+offset_top = 48.0
+offset_right = 99.0
+offset_bottom = 118.0
+grow_horizontal = 2
+theme = ExtResource("2_header")
+theme_override_colors/font_color = Color(0.14117648, 0.1764706, 0.18039216, 1)
+theme_override_colors/font_shadow_color = Color(0.057003886, 0.0773961, 0.0796623, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "Run Results"
+horizontal_alignment = 1
+
+[node name="Description" type="Label" parent="." unique_id=561257286]
+custom_minimum_size = Vector2(250, 0)
+custom_maximum_size = Vector2(500, -1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -432.0
+offset_top = -122.0
+offset_right = 68.0
+offset_bottom = -49.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_desc")
+theme_override_colors/font_color = Color(0.14117648, 0.1764706, 0.18039216, 1)
+text = "Review your final maze time and see how your run compares against the top standings."
+autowrap_mode = 3
