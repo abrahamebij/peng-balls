@@ -1,0 +1,7 @@
+[gd_resource type="Theme" format=3 uid="uid://d2m7psnckibpp"]
+
+[ext_resource type="FontFile" uid="uid://35t1hlhe27ya" path="res://resources/fonts/Poppins.ttf" id="1_mdomv"]
+
+[resource]
+default_font = ExtResource("1_mdomv")
+default_font_size = 24
