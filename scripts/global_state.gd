@@ -27,11 +27,68 @@ const WALLET_NAMES: Dictionary = {
 
 var _secret_buffer: String = ""
 const SECRET_KEYWORD: String = "chlorine"
+const SESSION_SAVE_PATH: String = "user://wallet_session.json"
 
 func _ready() -> void:
+	# Attempt to restore persisted session from previous run
+	_load_session()
+	
 	# Give the scene tree a frame to ensure all autoloads are mounted
 	await get_tree().process_frame
 	_hook_solana_service()
+
+
+func _save_session() -> void:
+	var data := {
+		"connected_pubkey": connected_pubkey,
+		"wallet_provider_id": wallet_provider_id,
+		"wallet_provider_name": wallet_provider_name,
+		"is_connected": is_connected,
+		"sol_balance": sol_balance
+	}
+	var file = FileAccess.open(SESSION_SAVE_PATH, FileAccess.WRITE)
+	if file:
+		file.store_string(JSON.stringify(data))
+		file.close()
+		print("[GlobalState] Saved wallet session to ", SESSION_SAVE_PATH)
+
+
+func _load_session() -> bool:
+	if not FileAccess.file_exists(SESSION_SAVE_PATH):
+		return false
+	var file = FileAccess.open(SESSION_SAVE_PATH, FileAccess.READ)
+	if not file:
+		return false
+	var content = file.get_as_text()
+	file.close()
+	var json = JSON.new()
+	if json.parse(content) != OK:
+		return false
+	var data = json.get_data()
+	if not (data is Dictionary):
+		return false
+	
+	var pubkey: String = data.get("connected_pubkey", "")
+	if pubkey.is_empty():
+		return false
+	
+	connected_pubkey = pubkey
+	shorthand_pubkey = get_shorthand(connected_pubkey)
+	wallet_provider_id = data.get("wallet_provider_id", -1)
+	wallet_provider_name = data.get("wallet_provider_name", "Solana Wallet")
+	sol_balance = float(data.get("sol_balance", 0.0))
+	is_connected = true
+	print("[GlobalState] Restored saved session: %s (%s)" % [connected_pubkey, wallet_provider_name])
+	
+	wallet_connected.emit(connected_pubkey)
+	fetch_balance()
+	return true
+
+
+func _clear_session() -> void:
+	if FileAccess.file_exists(SESSION_SAVE_PATH):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(SESSION_SAVE_PATH))
+		print("[GlobalState] Cleared saved wallet session")
 
 
 func _input(event: InputEvent) -> void:
@@ -125,6 +182,7 @@ func _on_wallet_login_success() -> void:
 	is_connected = true
 	shorthand_pubkey = get_shorthand(connected_pubkey)
 	print("[GlobalState] Wallet Connected: %s (%s)" % [connected_pubkey, shorthand_pubkey])
+	_save_session()
 	wallet_connected.emit(connected_pubkey)
 
 	fetch_balance()
@@ -142,6 +200,7 @@ func disconnect_wallet() -> void:
 	wallet_provider_id = -1
 	wallet_provider_name = ""
 	sol_balance = 0.0
+	_clear_session()
 	print("[GlobalState] Wallet Disconnected")
 	wallet_disconnected.emit()
 
@@ -155,6 +214,7 @@ func activate_dev_bypass() -> void:
 	wallet_provider_id = 999
 	wallet_provider_name = "Dev Bypass (Chlorine)"
 	sol_balance = 25.50
+	_save_session()
 	
 	wallet_connected.emit(connected_pubkey)
 	balance_updated.emit(sol_balance)
@@ -178,6 +238,7 @@ func fetch_balance() -> void:
 func _on_balance_loaded(balance_lamports: int) -> void:
 	sol_balance = float(balance_lamports) / 1_000_000_000.0
 	print("[GlobalState] Updated SOL Balance: ", sol_balance)
+	_save_session()
 	balance_updated.emit(sol_balance)
 
 
