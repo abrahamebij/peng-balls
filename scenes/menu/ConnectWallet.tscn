@@ -70,10 +70,6 @@ cache/0/24/0/underline_position = 0.0
 cache/0/24/0/underline_thickness = 0.0
 cache/0/24/0/scale = 1.0
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0ai6f"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vfx3p"]
-
 [node name="ConnectWallet" type="Control" unique_id=1028886795]
 layout_mode = 3
 anchors_preset = 15
@@ -124,6 +120,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("3_5tgaw")
 theme_override_colors/font_color = Color(0.14117648, 0.1764706, 0.18039216, 1)
+theme_override_font_sizes/font_size = 22
 text = "Connect your Solana wallet to enter weekly speedrun pools and track your standings."
 horizontal_alignment = 1
 autowrap_mode = 3
@@ -173,15 +170,3 @@ text = "Connect Wallet"
 position = Vector2(83.00001, 181.99998)
 scale = Vector2(0.20156246, 0.18397653)
 texture = ExtResource("10_5tgaw")
-
-[node name="BackBtn" type="Button" parent="." unique_id=2121217124]
-layout_mode = 0
-offset_left = 599.0
-offset_top = 532.0
-offset_right = 678.0
-offset_bottom = 563.0
-theme_override_colors/font_color = Color(0.14117648, 0.1764706, 0.18039216, 1)
-theme_override_font_sizes/font_size = 20
-theme_override_styles/normal = SubResource("StyleBoxEmpty_0ai6f")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_vfx3p")
-text = "Go Back"

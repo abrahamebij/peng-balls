@@ -28,6 +28,13 @@ var time_elapsed = 0.0     # seconds the player has spent in this run
 
 
 func _ready():
+	# No unauthenticated user should be able to play the game
+	if has_node("/root/GlobalState"):
+		var gs = get_node("/root/GlobalState")
+		if not gs.is_connected:
+			get_tree().change_scene_to_file("res://scenes/menu/ConnectWallet.tscn")
+			return
+
 	# The HUD must keep working while the game is paused, or the buttons won't click.
 	$HUD.process_mode = Node.PROCESS_MODE_ALWAYS
 	end_panel.visible = false

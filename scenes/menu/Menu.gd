@@ -7,6 +7,13 @@ extends Control
 
 
 func _ready():
+	# Enforce authentication: no unauthenticated user should access the menu or game
+	if has_node("/root/GlobalState"):
+		var gs = get_node("/root/GlobalState")
+		if not gs.is_connected:
+			get_tree().change_scene_to_file("res://scenes/menu/ConnectWallet.tscn")
+			return
+
 	start_button.pressed.connect(_on_start)
 	if multiplayer_button:
 		multiplayer_button.pressed.connect(_on_multiplayer)
@@ -34,4 +41,7 @@ func _on_credits():
 
 
 func _on_account_info():
-	get_tree().change_scene_to_file("res://scenes/menu/ConnectWallet.tscn")
+	if ResourceLoader.exists("res://scenes/menu/AccountInfo.tscn"):
+		get_tree().change_scene_to_file("res://scenes/menu/AccountInfo.tscn")
+	else:
+		get_tree().change_scene_to_file("res://scenes/menu/ConnectWallet.tscn")

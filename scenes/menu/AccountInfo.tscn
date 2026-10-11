@@ -8,6 +8,8 @@
 [ext_resource type="StyleBox" path="res://styles/menu-btn.tres" id="6_hpf7d"]
 [ext_resource type="StyleBox" path="res://styles/menu-btn-pressed.tres" id="7_so4o1"]
 [ext_resource type="StyleBox" path="res://styles/menu-btn-hovered.tres" id="8_2wb4t"]
+[ext_resource type="Script" uid="uid://cntotmxop46pf" path="res://scenes/menu/account_info.gd" id="9_aiscript"]
+[ext_resource type="Texture2D" uid="uid://x1l20deuymnh" path="res://resources/images/menu/copy_icon.svg" id="10_copyicon"]
 
 [sub_resource type="Theme" id="Theme_mg23a"]
 default_font = ExtResource("5_igmli")
@@ -85,6 +87,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("9_aiscript")
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=2047916109]
 layout_mode = 1
@@ -118,8 +121,9 @@ anchor_right = 0.075
 anchor_bottom = 0.179
 offset_left = 57.0
 offset_top = 162.0
-offset_right = 399.0
+offset_right = 650.0
 offset_bottom = 91.34
+theme_override_constants/separation = 8
 
 [node name="Label" type="Label" parent="WalletAddress" unique_id=1170649717]
 custom_minimum_size = Vector2(160, 0)
@@ -133,14 +137,30 @@ text = "Wallet Address: "
 autowrap_mode = 3
 
 [node name="Value" type="Label" parent="WalletAddress" unique_id=1442959741]
-custom_minimum_size = Vector2(250, 0)
-custom_maximum_size = Vector2(500, -1)
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme = ExtResource("3_desc")
 theme_override_colors/font_color = Color(0.14117648, 0.1764706, 0.18039216, 1)
 theme_override_font_sizes/font_size = 18
-text = "0xknen3nro3on4o"
+text = "Not Connected"
 autowrap_mode = 3
+
+[node name="CopyBtn" type="Button" parent="WalletAddress" unique_id=1559281729]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Copy Address"
+icon = ExtResource("10_copyicon")
+flat = true
+expand_icon = true
+
+[node name="CopiedLabel" type="Label" parent="WalletAddress" unique_id=1559281730]
+visible = false
+layout_mode = 2
+theme = ExtResource("3_desc")
+theme_override_colors/font_color = Color(0.14117648, 0.55, 0.18039216, 1)
+theme_override_fonts/font = ExtResource("4_eqe0f")
+theme_override_font_sizes/font_size = 16
+text = "Copied!"
 
 [node name="Balance" type="HBoxContainer" parent="." unique_id=894783017]
 layout_mode = 1
@@ -170,15 +190,15 @@ layout_mode = 2
 theme = ExtResource("3_desc")
 theme_override_colors/font_color = Color(0.14117648, 0.1764706, 0.18039216, 1)
 theme_override_font_sizes/font_size = 18
-text = "40 SOL"
+text = "-- SOL"
 autowrap_mode = 3
 
 [node name="DisconnectBtn" type="Button" parent="." unique_id=1001242158]
 layout_mode = 0
 offset_left = 172.0
-offset_top = 282.0
+offset_top = 302.0
 offset_right = 414.0
-offset_bottom = 333.0
+offset_bottom = 353.0
 theme = SubResource("Theme_mg23a")
 theme_override_colors/font_color = Color(0.960784, 0.960784, 0.960784, 1)
 theme_override_colors/font_focus_color = Color(0.141176, 0.176471, 0.180392, 1)
@@ -191,6 +211,25 @@ theme_override_styles/pressed = ExtResource("7_so4o1")
 theme_override_styles/hover = ExtResource("8_2wb4t")
 theme_override_styles/focus = ExtResource("7_so4o1")
 text = "Disconnect Wallet"
+
+[node name="BackBtn" type="Button" parent="." unique_id=1001242159]
+layout_mode = 0
+offset_left = 172.0
+offset_top = 368.0
+offset_right = 414.0
+offset_bottom = 419.0
+theme = SubResource("Theme_mg23a")
+theme_override_colors/font_color = Color(0.960784, 0.960784, 0.960784, 1)
+theme_override_colors/font_focus_color = Color(0.141176, 0.176471, 0.180392, 1)
+theme_override_colors/font_pressed_color = Color(0.141176, 0.176471, 0.180392, 1)
+theme_override_colors/font_hover_color = Color(0.141176, 0.176471, 0.180392, 1)
+theme_override_fonts/font = SubResource("FontFile_ef21d")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = ExtResource("6_hpf7d")
+theme_override_styles/pressed = ExtResource("7_so4o1")
+theme_override_styles/hover = ExtResource("8_2wb4t")
+theme_override_styles/focus = ExtResource("7_so4o1")
+text = "Back to Menu"
 
 [node name="Note" type="Label" parent="." unique_id=1160236434]
 custom_minimum_size = Vector2(160, 0)
