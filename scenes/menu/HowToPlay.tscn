@@ -53,10 +53,10 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -412.0
-offset_top = 18.0
-offset_right = 72.0
-offset_bottom = 88.0
+offset_left = -477.0
+offset_top = 25.0
+offset_right = 7.0
+offset_bottom = 95.0
 grow_horizontal = 2
 theme = ExtResource("3_header")
 theme_override_colors/font_color = Color(0.14117648, 0.1764706, 0.18039216, 1)
@@ -74,10 +74,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -447.0
-offset_top = -156.0
-offset_right = 66.0
-offset_bottom = 204.0
+offset_left = -600.0
+offset_top = -229.0
+offset_right = -87.0
+offset_bottom = 131.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("4_desc")
@@ -87,11 +87,12 @@ text = "• GOAL:
 Navigate the 3D procedural maze and collect every gold coin to complete the run in record time.
 
 • CONTROLS:
-- Move: Drag the on-screen joystick on the bottom-left (or WASD / Arrow keys on PC).
+- Move: Drag the on-screen joystick on the bottom-left.
 - Camera: Drag anywhere on the screen to rotate and tilt your camera angle.
 
 • HAZARDS:
-Avoid the red patrol spheres! They will chase you on sight. Touching an enemy immediately ends your run."
+Avoid the red patrol spheres! They will chase you on sight. 
+Touching an enemy immediately ends your run."
 autowrap_mode = 3
 
 [node name="BackBtn" type="Button" parent="." unique_id=823976257]
@@ -101,10 +102,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -293.0
-offset_top = 213.0
-offset_right = -153.0
-offset_bottom = 258.0
+offset_left = -353.0
+offset_top = 153.0
+offset_right = -213.0
+offset_bottom = 198.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.960784, 0.960784, 0.960784, 1)

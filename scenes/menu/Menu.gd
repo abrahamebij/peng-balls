@@ -35,4 +35,3 @@ func _on_credits():
 
 func _on_account_info():
 	get_tree().change_scene_to_file("res://scenes/menu/ConnectWallet.tscn")
-

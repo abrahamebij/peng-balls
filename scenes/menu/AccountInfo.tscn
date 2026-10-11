@@ -3,6 +3,80 @@
 [ext_resource type="Texture2D" uid="uid://dwof2pi5h73j" path="res://resources/images/backdrop_1.jpg" id="1_accountinfo"]
 [ext_resource type="Theme" uid="uid://cs0nt8ifxphb4" path="res://styles/header.tres" id="2_header"]
 [ext_resource type="Theme" uid="uid://d2m7psnckibpp" path="res://styles/description.tres" id="3_desc"]
+[ext_resource type="FontFile" uid="uid://bveja00ti473e" path="res://resources/fonts/Poppins-Bold.ttf" id="4_eqe0f"]
+[ext_resource type="FontFile" uid="uid://bqsrduixcmfyp" path="res://resources/fonts/Isometra.ttf" id="5_igmli"]
+[ext_resource type="StyleBox" path="res://styles/menu-btn.tres" id="6_hpf7d"]
+[ext_resource type="StyleBox" path="res://styles/menu-btn-pressed.tres" id="7_so4o1"]
+[ext_resource type="StyleBox" path="res://styles/menu-btn-hovered.tres" id="8_2wb4t"]
+
+[sub_resource type="Theme" id="Theme_mg23a"]
+default_font = ExtResource("5_igmli")
+default_font_size = 24
+
+[sub_resource type="FontFile" id="FontFile_ef21d"]
+fallbacks = Array[Font]([ExtResource("4_eqe0f")])
+subpixel_positioning = 0
+msdf_pixel_range = 14
+msdf_size = 128
+cache/0/variation_coordinates = {}
+cache/0/face_index = 0
+cache/0/embolden = 0.0
+cache/0/transform = Transform2D(1, 0, 0, 1, 0, 0)
+cache/0/spacing_top = 0
+cache/0/spacing_bottom = 0
+cache/0/spacing_space = 0
+cache/0/spacing_glyph = 0
+cache/0/baseline_offset = 0.0
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/17/0/ascent = 0.0
+cache/0/17/0/descent = 0.0
+cache/0/17/0/underline_position = 0.0
+cache/0/17/0/underline_thickness = 0.0
+cache/0/17/0/scale = 1.0
+cache/0/18/0/ascent = 0.0
+cache/0/18/0/descent = 0.0
+cache/0/18/0/underline_position = 0.0
+cache/0/18/0/underline_thickness = 0.0
+cache/0/18/0/scale = 1.0
+cache/0/19/0/ascent = 0.0
+cache/0/19/0/descent = 0.0
+cache/0/19/0/underline_position = 0.0
+cache/0/19/0/underline_thickness = 0.0
+cache/0/19/0/scale = 1.0
+cache/0/20/0/ascent = 0.0
+cache/0/20/0/descent = 0.0
+cache/0/20/0/underline_position = 0.0
+cache/0/20/0/underline_thickness = 0.0
+cache/0/20/0/scale = 1.0
+cache/0/21/0/ascent = 0.0
+cache/0/21/0/descent = 0.0
+cache/0/21/0/underline_position = 0.0
+cache/0/21/0/underline_thickness = 0.0
+cache/0/21/0/scale = 1.0
+cache/0/32/0/ascent = 0.0
+cache/0/32/0/descent = 0.0
+cache/0/32/0/underline_position = 0.0
+cache/0/32/0/underline_thickness = 0.0
+cache/0/32/0/scale = 1.0
+cache/0/24/0/ascent = 0.0
+cache/0/24/0/descent = 0.0
+cache/0/24/0/underline_position = 0.0
+cache/0/24/0/underline_thickness = 0.0
+cache/0/24/0/scale = 1.0
+cache/0/23/0/ascent = 0.0
+cache/0/23/0/descent = 0.0
+cache/0/23/0/underline_position = 0.0
+cache/0/23/0/underline_thickness = 0.0
+cache/0/23/0/scale = 1.0
+cache/0/22/0/ascent = 0.0
+cache/0/22/0/descent = 0.0
+cache/0/22/0/underline_position = 0.0
+cache/0/22/0/underline_thickness = 0.0
+cache/0/22/0/scale = 1.0
 
 [node name="AccountInfo" type="Control" unique_id=146560502]
 layout_mode = 3
@@ -25,10 +99,10 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -397.0
-offset_top = 26.0
-offset_right = 87.0
-offset_bottom = 96.0
+offset_left = -475.0
+offset_top = 40.0
+offset_right = 9.0
+offset_bottom = 110.0
 grow_horizontal = 2
 theme = ExtResource("2_header")
 theme_override_colors/font_color = Color(0.14117648, 0.1764706, 0.18039216, 1)
@@ -37,23 +111,127 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "Account Info"
 horizontal_alignment = 1
 
-[node name="Description" type="Label" parent="." unique_id=1170649717]
-custom_minimum_size = Vector2(250, 0)
-custom_maximum_size = Vector2(500, -1)
+[node name="WalletAddress" type="HBoxContainer" parent="." unique_id=1118756423]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -398.0
-offset_top = -166.0
-offset_right = 102.0
-offset_bottom = -93.0
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = -1
+anchor_right = 0.075
+anchor_bottom = 0.179
+offset_left = 57.0
+offset_top = 162.0
+offset_right = 399.0
+offset_bottom = 91.34
+
+[node name="Label" type="Label" parent="WalletAddress" unique_id=1170649717]
+custom_minimum_size = Vector2(160, 0)
+custom_maximum_size = Vector2(273, -1)
+layout_mode = 2
 theme = ExtResource("3_desc")
 theme_override_colors/font_color = Color(0.14117648, 0.1764706, 0.18039216, 1)
-text = "View your connected wallet address, token balances, and run history."
-horizontal_alignment = 1
+theme_override_fonts/font = ExtResource("4_eqe0f")
+theme_override_font_sizes/font_size = 18
+text = "Wallet Address: "
 autowrap_mode = 3
+
+[node name="Value" type="Label" parent="WalletAddress" unique_id=1442959741]
+custom_minimum_size = Vector2(250, 0)
+custom_maximum_size = Vector2(500, -1)
+layout_mode = 2
+theme = ExtResource("3_desc")
+theme_override_colors/font_color = Color(0.14117648, 0.1764706, 0.18039216, 1)
+theme_override_font_sizes/font_size = 18
+text = "0xknen3nro3on4o"
+autowrap_mode = 3
+
+[node name="Balance" type="HBoxContainer" parent="." unique_id=894783017]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.075
+anchor_bottom = 0.179
+offset_left = 57.0
+offset_top = 202.0
+offset_right = 399.0
+offset_bottom = 131.34
+
+[node name="Label" type="Label" parent="Balance" unique_id=1321760990]
+custom_minimum_size = Vector2(160, 0)
+custom_maximum_size = Vector2(273, -1)
+layout_mode = 2
+theme = ExtResource("3_desc")
+theme_override_colors/font_color = Color(0.14117648, 0.1764706, 0.18039216, 1)
+theme_override_fonts/font = ExtResource("4_eqe0f")
+theme_override_font_sizes/font_size = 18
+text = "Balance: "
+autowrap_mode = 3
+
+[node name="Value" type="Label" parent="Balance" unique_id=268965248]
+custom_minimum_size = Vector2(250, 0)
+custom_maximum_size = Vector2(500, -1)
+layout_mode = 2
+theme = ExtResource("3_desc")
+theme_override_colors/font_color = Color(0.14117648, 0.1764706, 0.18039216, 1)
+theme_override_font_sizes/font_size = 18
+text = "40 SOL"
+autowrap_mode = 3
+
+[node name="DisconnectBtn" type="Button" parent="." unique_id=1001242158]
+layout_mode = 0
+offset_left = 172.0
+offset_top = 282.0
+offset_right = 414.0
+offset_bottom = 333.0
+theme = SubResource("Theme_mg23a")
+theme_override_colors/font_color = Color(0.960784, 0.960784, 0.960784, 1)
+theme_override_colors/font_focus_color = Color(0.141176, 0.176471, 0.180392, 1)
+theme_override_colors/font_pressed_color = Color(0.141176, 0.176471, 0.180392, 1)
+theme_override_colors/font_hover_color = Color(0.141176, 0.176471, 0.180392, 1)
+theme_override_fonts/font = SubResource("FontFile_ef21d")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = ExtResource("6_hpf7d")
+theme_override_styles/pressed = ExtResource("7_so4o1")
+theme_override_styles/hover = ExtResource("8_2wb4t")
+theme_override_styles/focus = ExtResource("7_so4o1")
+text = "Disconnect Wallet"
+
+[node name="Note" type="Label" parent="." unique_id=1160236434]
+custom_minimum_size = Vector2(160, 0)
+custom_maximum_size = Vector2(273, -1)
+layout_mode = 0
+offset_left = 57.0
+offset_top = 498.0
+offset_right = 217.0
+offset_bottom = 526.0
+theme = ExtResource("3_desc")
+theme_override_colors/font_color = Color(0.14117648, 0.1764706, 0.18039216, 1)
+theme_override_fonts/font = ExtResource("4_eqe0f")
+theme_override_font_sizes/font_size = 20
+text = "Note:"
+autowrap_mode = 3
+
+[node name="FooterText" type="Label" parent="." unique_id=213475967]
+custom_minimum_size = Vector2(250, 0)
+custom_maximum_size = Vector2(450, -1)
+layout_mode = 0
+offset_left = 56.0
+offset_top = 529.0
+offset_right = 506.0
+offset_bottom = 584.0
+theme = ExtResource("3_desc")
+theme_override_colors/font_color = Color(0.14117648, 0.1764706, 0.18039216, 1)
+theme_override_font_sizes/font_size = 18
+text = "If you need free dev SOL to play, then you should check out this link below"
+autowrap_mode = 3
+
+[node name="FaucetLink" type="LinkButton" parent="." unique_id=230238812]
+layout_mode = 0
+offset_left = 126.0
+offset_top = 604.0
+offset_right = 408.0
+offset_bottom = 644.0
+theme = ExtResource("3_desc")
+theme_override_colors/font_color = Color(0.14117648, 0.1764706, 0.18039216, 1)
+theme_override_colors/font_pressed_color = Color(0.21960784, 0.27058825, 0.27450982, 1)
+theme_override_colors/font_hover_color = Color(0.21960784, 0.27058825, 0.27450982, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.18153045, 0.22594619, 0.2293644, 1)
+theme_override_fonts/font = ExtResource("4_eqe0f")
+text = "https://faucet.solana.com/"
+uri = "https://faucet.solana.com"
