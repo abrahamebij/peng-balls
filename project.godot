@@ -13,7 +13,7 @@ config_version=5
 config/name="peng-balls"
 run/main_scene="uid://cxvjctgkbplx3"
 config/features=PackedStringArray("4.7", "Forward Plus")
-config/icon="res://icon.png"
+config/icon="uid://cnb0bm5p5sb1"
 
 [autoload]
 

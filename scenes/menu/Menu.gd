@@ -1,6 +1,7 @@
 extends Control
 
 @onready var start_button = $VBoxContainer/StartButton
+@onready var open_bets_button = get_node_or_null("VBoxContainer/OpenBetsButton")
 @onready var how_to_play_button = get_node_or_null("VBoxContainer/HowToPlayButton")
 @onready var credits_button = get_node_or_null("VBoxContainer/CreditsButton")
 @onready var account_info_button = get_node_or_null("AccountInfo")
@@ -15,6 +16,8 @@ func _ready():
 			return
 
 	start_button.pressed.connect(_on_start)
+	if open_bets_button:
+		open_bets_button.pressed.connect(_on_open_bets)
 	if how_to_play_button:
 		how_to_play_button.pressed.connect(_on_how_to_play)
 	if credits_button:
@@ -30,6 +33,11 @@ func _on_start():
 		get_tree().change_scene_to_file("res://scenes/menu/LoadingScreen.tscn")
 	else:
 		get_tree().change_scene_to_file("res://scenes/game/Game.tscn")
+
+
+func _on_open_bets():
+	if ResourceLoader.exists("res://scenes/menu/OpenBets.tscn"):
+		get_tree().change_scene_to_file("res://scenes/menu/OpenBets.tscn")
 
 
 func _on_how_to_play():

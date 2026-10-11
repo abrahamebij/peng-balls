@@ -16,6 +16,7 @@ var wallet_provider_id: int = -1
 var wallet_provider_name: String = ""
 var sol_balance: float = 0.0
 var next_scene_path: String = ""
+var selected_pool: Dictionary = {}
 
 # Supported wallet IDs mapped to readable names
 const WALLET_NAMES: Dictionary = {
