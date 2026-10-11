@@ -18,6 +18,23 @@ var sol_balance: float = 0.0
 var next_scene_path: String = ""
 var selected_pool: Dictionary = {}
 
+# Active run configuration: "casual" (free / fun) or "staked" (community pool)
+var active_run_mode: String = "casual"
+var active_run_pool: Dictionary = {}
+
+# Last run results to display on Result.tscn
+var last_run_result: Dictionary = {
+	"won": false,
+	"time_elapsed": 0.0,
+	"time_formatted": "00:00.00",
+	"time_ms": 0,
+	"mode": "casual",
+	"pool": {},
+	"coins_collected": 0,
+	"coins_total": 0,
+	"estimated_rank": -1
+}
+
 # Supported wallet IDs mapped to readable names
 const WALLET_NAMES: Dictionary = {
 	20: "Phantom",

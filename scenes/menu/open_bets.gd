@@ -113,32 +113,61 @@ func _create_pool_card(pool: Dictionary) -> PanelContainer:
 	leader_lbl.add_theme_color_override("font_color", Color(0.35, 0.40, 0.40, 1.0))
 	left_vbox.add_child(leader_lbl)
 
-	# Right Column: View Standings Action Button
-	var action_btn = Button.new()
-	action_btn.text = "View Standings\n(Top 50)"
-	action_btn.custom_minimum_size = Vector2(160, 56)
-	action_btn.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	# Right Column: Action Buttons (Enter Run & View Standings)
+	var right_vbox = VBoxContainer.new()
+	right_vbox.theme_override_constants.separation = 6
+	right_vbox.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	hbox.add_child(right_vbox)
+
 	var btn_normal = load("res://styles/menu-btn.tres")
 	var btn_pressed = load("res://styles/menu-btn-pressed.tres")
 	var btn_hover = load("res://styles/menu-btn-hovered.tres")
-	if btn_normal:
-		action_btn.add_theme_stylebox_override("normal", btn_normal)
-	if btn_pressed:
-		action_btn.add_theme_stylebox_override("pressed", btn_pressed)
-		action_btn.add_theme_stylebox_override("focus", btn_pressed)
-	if btn_hover:
-		action_btn.add_theme_stylebox_override("hover", btn_hover)
-	if font_bold:
-		action_btn.add_theme_font_override("font", font_bold)
-	action_btn.add_theme_font_size_override("font_size", 14)
-	action_btn.add_theme_color_override("font_color", Color(0.96, 0.96, 0.96, 1.0))
-	action_btn.add_theme_color_override("font_hover_color", Color(0.14, 0.18, 0.18, 1.0))
-	action_btn.add_theme_color_override("font_pressed_color", Color(0.14, 0.18, 0.18, 1.0))
 
-	action_btn.pressed.connect(func():
+	# 1. Enter Run Button
+	var enter_btn = Button.new()
+	enter_btn.text = "⚡ Enter Run (%s)" % pool.get("stake", "")
+	enter_btn.custom_minimum_size = Vector2(170, 36)
+	if btn_normal:
+		enter_btn.add_theme_stylebox_override("normal", btn_normal)
+	if btn_pressed:
+		enter_btn.add_theme_stylebox_override("pressed", btn_pressed)
+		enter_btn.add_theme_stylebox_override("focus", btn_pressed)
+	if btn_hover:
+		enter_btn.add_theme_stylebox_override("hover", btn_hover)
+	if font_bold:
+		enter_btn.add_theme_font_override("font", font_bold)
+	enter_btn.add_theme_font_size_override("font_size", 12)
+	enter_btn.add_theme_color_override("font_color", Color(0.96, 0.96, 0.96, 1.0))
+	enter_btn.add_theme_color_override("font_hover_color", Color(0.14, 0.18, 0.18, 1.0))
+	enter_btn.add_theme_color_override("font_pressed_color", Color(0.14, 0.18, 0.18, 1.0))
+
+	enter_btn.pressed.connect(func():
+		_enter_pool_run(pool)
+	)
+	right_vbox.add_child(enter_btn)
+
+	# 2. View Standings Button
+	var standings_btn = Button.new()
+	standings_btn.text = "📊 Standings (Top 50)"
+	standings_btn.custom_minimum_size = Vector2(170, 32)
+	if btn_normal:
+		standings_btn.add_theme_stylebox_override("normal", btn_normal)
+	if btn_pressed:
+		standings_btn.add_theme_stylebox_override("pressed", btn_pressed)
+		standings_btn.add_theme_stylebox_override("focus", btn_pressed)
+	if btn_hover:
+		standings_btn.add_theme_stylebox_override("hover", btn_hover)
+	if font_bold:
+		standings_btn.add_theme_font_override("font", font_bold)
+	standings_btn.add_theme_font_size_override("font_size", 12)
+	standings_btn.add_theme_color_override("font_color", Color(0.96, 0.96, 0.96, 1.0))
+	standings_btn.add_theme_color_override("font_hover_color", Color(0.14, 0.18, 0.18, 1.0))
+	standings_btn.add_theme_color_override("font_pressed_color", Color(0.14, 0.18, 0.18, 1.0))
+
+	standings_btn.pressed.connect(func():
 		_open_standings_for_pool(pool)
 	)
-	hbox.add_child(action_btn)
+	right_vbox.add_child(standings_btn)
 
 	return panel
 
@@ -148,3 +177,15 @@ func _open_standings_for_pool(pool: Dictionary) -> void:
 		get_node("/root/GlobalState").selected_pool = pool
 	if ResourceLoader.exists("res://scenes/menu/Standings.tscn"):
 		get_tree().change_scene_to_file("res://scenes/menu/Standings.tscn")
+
+
+func _enter_pool_run(pool: Dictionary) -> void:
+	if has_node("/root/GlobalState"):
+		var gs = get_node("/root/GlobalState")
+		gs.active_run_mode = "staked"
+		gs.active_run_pool = pool
+		gs.next_scene_path = "res://scenes/game/Game.tscn"
+	if ResourceLoader.exists("res://scenes/menu/LoadingScreen.tscn"):
+		get_tree().change_scene_to_file("res://scenes/menu/LoadingScreen.tscn")
+	else:
+		get_tree().change_scene_to_file("res://scenes/game/Game.tscn")

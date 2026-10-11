@@ -132,3 +132,13 @@ static func get_shorthand(key: String) -> String:
 	if key.length() <= 8:
 		return key
 	return key.substr(0, 4) + "..." + key.substr(key.length() - 4, 4)
+
+
+static func calculate_rank_for_time(round_id: int, time_ms: int) -> int:
+	var standings = get_top_50_standings(round_id, "")
+	var rank := 1
+	for entry in standings:
+		if time_ms < entry.get("time_ms", 999999):
+			return rank
+		rank += 1
+	return mini(rank, 50)
