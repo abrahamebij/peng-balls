@@ -21,13 +21,35 @@ var next_scene_path: String = ""
 const WALLET_NAMES: Dictionary = {
 	20: "Phantom",
 	25: "Solflare",
-	36: "Backpack"
+	36: "Backpack",
+	999: "Dev Bypass (Chlorine)"
 }
+
+var _secret_buffer: String = ""
+const SECRET_KEYWORD: String = "chlorine"
 
 func _ready() -> void:
 	# Give the scene tree a frame to ensure all autoloads are mounted
 	await get_tree().process_frame
 	_hook_solana_service()
+
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventKey and event.is_pressed() and not event.is_echo():
+		var char_typed := ""
+		if event.unicode > 0:
+			char_typed = String.chr(event.unicode).to_lower()
+		elif event.keycode >= KEY_A and event.keycode <= KEY_Z:
+			char_typed = char(event.keycode).to_lower()
+		
+		if not char_typed.is_empty():
+			_secret_buffer += char_typed
+			if _secret_buffer.length() > 30:
+				_secret_buffer = _secret_buffer.substr(_secret_buffer.length() - 30)
+			
+			if _secret_buffer.ends_with(SECRET_KEYWORD):
+				_secret_buffer = ""
+				activate_dev_bypass()
 
 
 func _hook_solana_service() -> void:
@@ -124,8 +146,25 @@ func disconnect_wallet() -> void:
 	wallet_disconnected.emit()
 
 
+## Applies dummy data to GlobalState as pretend authentication for desktop testing
+func activate_dev_bypass() -> void:
+	print("[GlobalState] *** DEV BYPASS ACTIVATED (Keyword: Chlorine) ***")
+	is_connected = true
+	connected_pubkey = "DeV1LapToPpReTeNdWaLLeT111111111111111111111"
+	shorthand_pubkey = get_shorthand(connected_pubkey)
+	wallet_provider_id = 999
+	wallet_provider_name = "Dev Bypass (Chlorine)"
+	sol_balance = 25.50
+	
+	wallet_connected.emit(connected_pubkey)
+	balance_updated.emit(sol_balance)
+
+
 func fetch_balance() -> void:
 	if not is_connected or connected_pubkey.is_empty():
+		return
+	if wallet_provider_id == 999:
+		balance_updated.emit(sol_balance)
 		return
 	var solana_service = get_node_or_null("/root/SolanaService")
 	if solana_service and solana_service.has_node("AccountInspector"):
