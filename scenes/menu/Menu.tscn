@@ -9,6 +9,9 @@
 
 [sub_resource type="FontFile" id="1"]
 fallbacks = Array[Font]([ExtResource("1")])
+subpixel_positioning = 0
+msdf_pixel_range = 14
+msdf_size = 128
 cache/0/variation_coordinates = {}
 cache/0/face_index = 0
 cache/0/embolden = 0.0
@@ -192,7 +195,6 @@ theme_override_styles/focus = ExtResource("4")
 text = "Account Info."
 
 [node name="ModeSelectModal" type="Control" parent="." unique_id=987654321]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -238,7 +240,7 @@ horizontal_alignment = 1
 
 [node name="Subtitle" type="Label" parent="ModeSelectModal/ModalPanel/VBox" unique_id=987654326]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.35, 0.40, 0.40, 1)
+theme_override_colors/font_color = Color(0.35, 0.4, 0.4, 1)
 theme_override_font_sizes/font_size = 13
 text = "Choose whether to play for fun (free) or enter the weekly prize pool."
 horizontal_alignment = 1
@@ -265,9 +267,9 @@ text = "Play For Fun (Casual Run)"
 
 [node name="Desc" type="Label" parent="ModeSelectModal/ModalPanel/VBox/CasualCard/HBox/Info" unique_id=987654331]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.35, 0.40, 0.40, 1)
+theme_override_colors/font_color = Color(0.35, 0.4, 0.4, 1)
 theme_override_font_sizes/font_size = 12
-text = "Stake: 0 SOL (Free) • Practice marble physics without staking"
+text = "Practice marble physics without staking"
 
 [node name="PlayFreeBtn" type="Button" parent="ModeSelectModal/ModalPanel/VBox/CasualCard/HBox" unique_id=987654332]
 custom_minimum_size = Vector2(130, 36)
@@ -305,9 +307,9 @@ text = "Weekly Community Pool"
 
 [node name="Desc" type="Label" parent="ModeSelectModal/ModalPanel/VBox/StakedCard/VBox/Info" unique_id=987654337]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.35, 0.40, 0.40, 1)
+theme_override_colors/font_color = Color(0.35, 0.4, 0.4, 1)
 theme_override_font_sizes/font_size = 12
-text = "Stake to enter the community pot • 90% prize to 1st place • Top 50 leaderboard"
+text = "Stake to enter the community pot"
 
 [node name="PoolRow" type="HBoxContainer" parent="ModeSelectModal/ModalPanel/VBox/StakedCard/VBox" unique_id=987654338]
 layout_mode = 2
@@ -343,7 +345,7 @@ text = "Stake & Enter"
 custom_minimum_size = Vector2(100, 32)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_colors/font_color = Color(0.35, 0.40, 0.40, 1)
+theme_override_colors/font_color = Color(0.35, 0.4, 0.4, 1)
 theme_override_colors/font_hover_color = Color(0.141176, 0.176471, 0.180392, 1)
 theme_override_font_sizes/font_size = 14
 text = "Cancel"
