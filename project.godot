@@ -32,6 +32,10 @@ window/handheld/orientation="sensor_landscape"
 
 enabled=PackedStringArray("res://addons/SolanaSDK/plugin.cfg")
 
+[global_group]
+
+panel=""
+
 [physics]
 
 common/enable_pause_aware_picking=true

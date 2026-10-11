@@ -16,9 +16,9 @@ extends WorldEnvironment
 @onready var coin_label = $HUD/CoinLabel
 @onready var time_label = $HUD/TimeLabel
 @onready var end_panel = $HUD/EndPanel
-@onready var message = $HUD/EndPanel/VBoxContainer/Message
-@onready var restart_button = $HUD/EndPanel/VBoxContainer/ButtonContainer/RestartButton
-@onready var menu_button = $HUD/EndPanel/VBoxContainer/ButtonContainer/MenuButton
+@onready var message = $HUD/EndPanel/Message
+@onready var restart_button = $HUD/EndPanel/ButtonContainer/RestartButton
+@onready var menu_button = $HUD/EndPanel/ButtonContainer/MenuButton
 
 # --- Variables ---
 var coins_total = 0
