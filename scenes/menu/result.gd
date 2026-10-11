@@ -53,20 +53,20 @@ func _populate_results() -> void:
 
 	# 1. Outcome
 	if won:
-		outcome_lbl.text = "🎉 VICTORY! MAZE CLEARED"
+		outcome_lbl.text = "VICTORY! MAZE CLEARED"
 		outcome_lbl.add_theme_color_override("font_color", Color(0.15, 0.60, 0.25, 1.0))
 	else:
-		outcome_lbl.text = "💀 CAUGHT BY ENEMY!"
+		outcome_lbl.text = "CAUGHT BY ENEMY!"
 		outcome_lbl.add_theme_color_override("font_color", Color(0.75, 0.20, 0.15, 1.0))
 
 	# 2. Mode
 	if mode == "staked" and not pool.is_empty():
-		mode_lbl.text = "🏆 %s (Stake: %s)" % [pool.get("name", "Pool"), pool.get("stake", "")]
-		mode_lbl.add_theme_color_override("font_color", Color(0.75, 0.45, 0.05, 1.0))
+		mode_lbl.text = "%s (Stake: %s)" % [pool.get("name", "Pool"), pool.get("stake", "")]
+		mode_lbl.add_theme_color_override("font_color", Color(0.14, 0.18, 0.18, 1.0))
 		standings_btn.visible = true
 	else:
-		mode_lbl.text = "🎮 Casual Practice (Free • 0 SOL)"
-		mode_lbl.add_theme_color_override("font_color", Color(0.20, 0.50, 0.40, 1.0))
+		mode_lbl.text = "Practice Run (Free)"
+		mode_lbl.add_theme_color_override("font_color", Color(0.25, 0.35, 0.35, 1.0))
 		standings_btn.visible = false
 
 	# 3. Time & Coins
@@ -77,7 +77,7 @@ func _populate_results() -> void:
 	if mode == "staked":
 		if won:
 			if estimated_rank > 0:
-				standing_lbl.text = "🌟 Projected Rank #%d in Weekly Pool! (Qualifies for Pot)" % estimated_rank
+				standing_lbl.text = "Projected Rank #%d in Weekly Pool" % estimated_rank
 				standing_lbl.add_theme_color_override("font_color", Color(0.15, 0.55, 0.20, 1.0))
 			else:
 				standing_lbl.text = "Run recorded in weekly pool stats."

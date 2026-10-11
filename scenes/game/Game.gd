@@ -39,28 +39,6 @@ func _ready():
 	$HUD.process_mode = Node.PROCESS_MODE_ALWAYS
 	end_panel.visible = false
 
-	# Add Mode Indicator on HUD
-	var mode_label = Label.new()
-	mode_label.name = "ModeLabel"
-	mode_label.offset_left = 35.0
-	mode_label.offset_top = 50.0
-	mode_label.offset_right = 450.0
-	mode_label.offset_bottom = 78.0
-	var font_desc = load("res://resources/fonts/Poppins-Bold.ttf")
-	if font_desc:
-		mode_label.add_theme_font_override("font", font_desc)
-	mode_label.add_theme_font_size_override("font_size", 13)
-
-	if has_node("/root/GlobalState"):
-		var gs = get_node("/root/GlobalState")
-		if gs.active_run_mode == "staked" and not gs.active_run_pool.is_empty():
-			mode_label.text = "🏆 %s [%s]" % [gs.active_run_pool.get("name", "Pool"), gs.active_run_pool.get("stake", "")]
-			mode_label.add_theme_color_override("font_color", Color(0.95, 0.75, 0.20, 1.0))
-		else:
-			mode_label.text = "🎮 Casual Practice (Free • 0 SOL)"
-			mode_label.add_theme_color_override("font_color", Color(0.35, 0.80, 0.55, 1.0))
-	$HUD.add_child(mode_label)
-
 	# Put the player in the starting room.
 	player.global_transform.origin = maze.get_start_position()
 	player.connect("died", Callable(self, "_on_player_died"))
@@ -72,32 +50,6 @@ func _ready():
 
 	restart_button.connect("pressed", Callable(self, "_on_restart"))
 	menu_button.connect("pressed", Callable(self, "_on_menu"))
-
-	# Add "View Results Breakdown" button to EndPanel
-	var btn_container = $HUD/EndPanel/VBoxContainer/ButtonContainer
-	if btn_container:
-		var results_btn = Button.new()
-		results_btn.text = "📊 View Run Results Breakdown"
-		results_btn.custom_minimum_size = Vector2(0, 48)
-		var btn_normal = load("res://styles/menu-btn.tres")
-		var btn_pressed = load("res://styles/menu-btn-pressed.tres")
-		var btn_hover = load("res://styles/menu-btn-hovered.tres")
-		if btn_normal:
-			results_btn.add_theme_stylebox_override("normal", btn_normal)
-		if btn_pressed:
-			results_btn.add_theme_stylebox_override("pressed", btn_pressed)
-			results_btn.add_theme_stylebox_override("focus", btn_pressed)
-		if btn_hover:
-			results_btn.add_theme_stylebox_override("hover", btn_hover)
-		if font_desc:
-			results_btn.add_theme_font_override("font", font_desc)
-		results_btn.add_theme_font_size_override("font_size", 14)
-		results_btn.add_theme_color_override("font_color", Color(0.96, 0.96, 0.96, 1.0))
-		results_btn.add_theme_color_override("font_hover_color", Color(0.14, 0.18, 0.18, 1.0))
-		results_btn.add_theme_color_override("font_pressed_color", Color(0.14, 0.18, 0.18, 1.0))
-		results_btn.pressed.connect(_on_view_results)
-		btn_container.add_child(results_btn)
-		btn_container.move_child(results_btn, 0)
 
 
 func _process(delta):
@@ -186,19 +138,9 @@ func _end_game(won: bool):
 		}
 
 	var status_text = "MAZE COMPLETED!" if won else "CAUGHT BY ENEMY!"
-	var mode_text = "🎮 Casual Run" if mode == "casual" else ("🏆 " + pool.get("name", "Pool"))
-	var rank_text = ("\n★ Projected Rank: #" + str(rank) + "!") if rank > 0 else ""
-	message.text = status_text + "\nTime: " + _format_time_precise(time_elapsed) + "\n" + mode_text + rank_text
+	message.text = status_text + "\nTime: " + _format_time_precise(time_elapsed)
 	end_panel.visible = true
 	get_tree().paused = true    # freeze the game behind the panel
-
-
-func _on_view_results():
-	get_tree().paused = false
-	if ResourceLoader.exists("res://scenes/menu/Result.tscn"):
-		get_tree().change_scene_to_file("res://scenes/menu/Result.tscn")
-	else:
-		_on_menu()
 
 
 func _on_restart():

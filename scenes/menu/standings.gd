@@ -82,18 +82,18 @@ func _create_table_row(entry: Dictionary, font_bold: Font) -> PanelContainer:
 	# Row Styling: Highlight if it is the current connected user
 	var style = StyleBoxFlat.new()
 	if is_player:
-		# Vibrant Gold / Amber highlight for the player
-		style.bg_color = Color(0.98, 0.85, 0.35, 0.95)
-		style.border_color = Color(0.85, 0.55, 0.10, 1.0)
+		# Highlighted row for the connected player
+		style.bg_color = Color(1.0, 1.0, 1.0, 1.0)
+		style.border_color = Color(0.14, 0.18, 0.18, 1.0)
 		style.set_border_width_all(2)
 		style.set_corner_radius_all(6)
 	else:
-		# Subtle alternating rows
+		# Clean alternating rows
 		if rank % 2 == 0:
-			style.bg_color = Color(0.95, 0.93, 0.88, 0.80)
+			style.bg_color = Color(1.0, 1.0, 1.0, 0.90)
 		else:
-			style.bg_color = Color(0.90, 0.88, 0.83, 0.80)
-		style.border_color = Color(0.80, 0.78, 0.74, 0.5)
+			style.bg_color = Color(0.95, 0.95, 0.95, 0.90)
+		style.border_color = Color(0.85, 0.85, 0.85, 0.6)
 		style.set_border_width_all(1)
 		style.set_corner_radius_all(4)
 
@@ -111,17 +111,7 @@ func _create_table_row(entry: Dictionary, font_bold: Font) -> PanelContainer:
 
 	# 1. Rank Column
 	var rank_lbl = Label.new()
-	var rank_text := str(rank)
-	if rank == 1:
-		rank_text = "🥇 #1"
-	elif rank == 2:
-		rank_text = "🥈 #2"
-	elif rank == 3:
-		rank_text = "🥉 #3"
-	else:
-		rank_text = "#%d" % rank
-
-	rank_lbl.text = rank_text
+	rank_lbl.text = "#%d" % rank
 	rank_lbl.custom_minimum_size = Vector2(80, 0)
 	rank_lbl.add_theme_font_size_override("font_size", 15)
 	rank_lbl.add_theme_color_override("font_color", text_color)
@@ -132,7 +122,7 @@ func _create_table_row(entry: Dictionary, font_bold: Font) -> PanelContainer:
 	# 2. Player Address Column
 	var player_lbl = Label.new()
 	if is_player:
-		player_lbl.text = "%s  ★ (YOU)" % entry.get("shorthand", "")
+		player_lbl.text = "%s (YOU)" % entry.get("shorthand", "")
 		if font_bold:
 			player_lbl.add_theme_font_override("font", font_bold)
 	else:

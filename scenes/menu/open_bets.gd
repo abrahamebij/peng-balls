@@ -49,7 +49,7 @@ func _create_pool_card(pool: Dictionary) -> PanelContainer:
 
 	# Card style
 	var style = StyleBoxFlat.new()
-	style.bg_color = Color(0.96, 0.94, 0.88, 0.92)
+	style.bg_color = Color(1.0, 1.0, 1.0, 0.98)
 	style.border_color = Color(0.24, 0.28, 0.28, 1.0)
 	style.set_border_width_all(2)
 	style.set_corner_radius_all(10)
@@ -93,7 +93,7 @@ func _create_pool_card(pool: Dictionary) -> PanelContainer:
 
 	# Stats line
 	var stats_lbl = Label.new()
-	stats_lbl.text = "💰 Pot: %s  •  Winner Takes (90%%): %s  •  Runs: %d" % [
+	stats_lbl.text = "Pot: %s  •  Winner Takes (90%%): %s  •  Runs: %d" % [
 		pool.get("total_pot", "0 SOL"),
 		pool.get("winner_cut", "0 SOL"),
 		pool.get("total_runs", 0)
@@ -104,7 +104,7 @@ func _create_pool_card(pool: Dictionary) -> PanelContainer:
 
 	# Leader & Timer line
 	var leader_lbl = Label.new()
-	leader_lbl.text = "⏱️ Time Left: %s  •  Current 1st: %s (%s)" % [
+	leader_lbl.text = "Time Left: %s  •  Current 1st: %s (%s)" % [
 		pool.get("time_left", "--"),
 		pool.get("current_leader", "--"),
 		pool.get("best_time", "--")
@@ -115,7 +115,7 @@ func _create_pool_card(pool: Dictionary) -> PanelContainer:
 
 	# Right Column: Action Buttons (Enter Run & View Standings)
 	var right_vbox = VBoxContainer.new()
-	right_vbox.theme_override_constants.separation = 6
+	right_vbox.add_theme_constant_override("separation", 6)
 	right_vbox.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	hbox.add_child(right_vbox)
 
@@ -125,7 +125,7 @@ func _create_pool_card(pool: Dictionary) -> PanelContainer:
 
 	# 1. Enter Run Button
 	var enter_btn = Button.new()
-	enter_btn.text = "⚡ Enter Run (%s)" % pool.get("stake", "")
+	enter_btn.text = "Enter Run (%s)" % pool.get("stake", "")
 	enter_btn.custom_minimum_size = Vector2(170, 36)
 	if btn_normal:
 		enter_btn.add_theme_stylebox_override("normal", btn_normal)
@@ -148,7 +148,7 @@ func _create_pool_card(pool: Dictionary) -> PanelContainer:
 
 	# 2. View Standings Button
 	var standings_btn = Button.new()
-	standings_btn.text = "📊 Standings (Top 50)"
+	standings_btn.text = "Standings (Top 50)"
 	standings_btn.custom_minimum_size = Vector2(170, 32)
 	if btn_normal:
 		standings_btn.add_theme_stylebox_override("normal", btn_normal)

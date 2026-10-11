@@ -27,7 +27,7 @@ cache/0/18/0/underline_thickness = 0.0
 cache/0/18/0/scale = 1.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
-bg_color = Color(0.96, 0.94, 0.88, 0.96)
+bg_color = Color(1, 1, 1, 0.98)
 border_color = Color(0.24, 0.28, 0.28, 1)
 border_width_left = 3
 border_width_top = 3
@@ -102,15 +102,15 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.15, 0.6, 0.25, 1)
 theme_override_fonts/font = ExtResource("4_font")
 theme_override_font_sizes/font_size = 26
-text = "🎉 VICTORY! MAZE CLEARED"
+text = "VICTORY! MAZE CLEARED"
 horizontal_alignment = 1
 
 [node name="ModeValue" type="Label" parent="Card/VBox" unique_id=597857591]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.75, 0.45, 0.05, 1)
+theme_override_colors/font_color = Color(0.14, 0.18, 0.18, 1)
 theme_override_fonts/font = ExtResource("4_font")
 theme_override_font_sizes/font_size = 17
-text = "🏆 Weekly Sprint Pool (Stake: 0.05 SOL)"
+text = "Weekly Sprint Pool (Stake: 0.05 SOL)"
 horizontal_alignment = 1
 
 [node name="HSeparator" type="HSeparator" parent="Card/VBox" unique_id=597857592]
@@ -162,7 +162,7 @@ theme = ExtResource("3_desc")
 theme_override_colors/font_color = Color(0.15, 0.55, 0.2, 1)
 theme_override_fonts/font = ExtResource("4_font")
 theme_override_font_sizes/font_size = 15
-text = "🌟 Projected Rank #1 in Weekly Pool! (Qualifies for Pot)"
+text = "Projected Rank #1 in Weekly Pool"
 horizontal_alignment = 1
 autowrap_mode = 3
 
@@ -187,7 +187,7 @@ theme_override_styles/normal = ExtResource("5_btn_normal")
 theme_override_styles/pressed = ExtResource("6_btn_pressed")
 theme_override_styles/hover = ExtResource("7_btn_hover")
 theme_override_styles/focus = ExtResource("6_btn_pressed")
-text = "📊 View Weekly Standings (Top 50)"
+text = "View Weekly Standings (Top 50)"
 
 [node name="ActionsRow" type="HBoxContainer" parent="Card/VBox/Buttons" unique_id=597857603]
 layout_mode = 2
@@ -207,7 +207,7 @@ theme_override_styles/normal = ExtResource("5_btn_normal")
 theme_override_styles/pressed = ExtResource("6_btn_pressed")
 theme_override_styles/hover = ExtResource("7_btn_hover")
 theme_override_styles/focus = ExtResource("6_btn_pressed")
-text = "⚡ Play Again"
+text = "Play Again"
 
 [node name="MenuBtn" type="Button" parent="Card/VBox/Buttons/ActionsRow" unique_id=597857605]
 custom_minimum_size = Vector2(0, 42)
@@ -223,4 +223,4 @@ theme_override_styles/normal = ExtResource("5_btn_normal")
 theme_override_styles/pressed = ExtResource("6_btn_pressed")
 theme_override_styles/hover = ExtResource("7_btn_hover")
 theme_override_styles/focus = ExtResource("6_btn_pressed")
-text = "🏠 Main Menu"
+text = "Main Menu"
