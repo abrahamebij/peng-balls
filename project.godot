@@ -13,6 +13,9 @@ config_version=5
 config/name="peng-balls"
 run/main_scene="uid://cxvjctgkbplx3"
 config/features=PackedStringArray("4.7", "Forward Plus")
+boot_splash/bg_color=Color(0.14117648, 0.1764706, 0.18039216, 1)
+boot_splash/stretch_mode=4
+boot_splash/image="uid://bw7gb3oaovsde"
 config/icon="uid://cnb0bm5p5sb1"
 
 [autoload]
