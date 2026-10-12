@@ -236,5 +236,4 @@ peng-balls/
 **Abraham Ebijuni** ([@abrahamebij](https://github.com/abrahamebij)), solo builder.
 
 ## License
-
-TODO: add a LICENSE file and name it here.
+Apache-2.0 license
