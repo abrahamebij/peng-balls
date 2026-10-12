@@ -52,7 +52,6 @@ func setup_mobile_identity() -> void:
 	if Engine.has_singleton("WalletAdapterAndroid"):
 		var plugin = Engine.get_singleton("WalletAdapterAndroid")
 		plugin.call("setIdentity", cluster_val, "https://pengballs.vercel.app/", "favicon.ico", "Peng Balls")
-		plugin.call("clearState")
 
 
 func try_login() -> void:

@@ -73,10 +73,18 @@ func _populate_table() -> void:
 		table_rows_container.add_child(row)
 
 	PoolDataService.fetch_standings(round_id, user_pubkey, self, func(standings: Array[Dictionary]):
-		if not is_instance_valid(table_rows_container) or standings.is_empty():
+		if not is_instance_valid(table_rows_container):
 			return
 		for child in table_rows_container.get_children():
 			child.queue_free()
+		if standings.is_empty():
+			var empty_lbl = Label.new()
+			empty_lbl.text = "No runs recorded in this pool yet. Enter a run to claim #1 on the leaderboard!"
+			empty_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			empty_lbl.add_theme_font_size_override("font_size", 14)
+			empty_lbl.add_theme_color_override("font_color", Color(0.35, 0.40, 0.40, 1.0))
+			table_rows_container.add_child(empty_lbl)
+			return
 		for entry in standings:
 			var row = _create_table_row(entry, font_bold)
 			table_rows_container.add_child(row)

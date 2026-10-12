@@ -39,6 +39,8 @@ func create_transaction(instructions:Array[Instruction],payer) -> Transaction:
 	on_tx_create_start.emit()
 	var transaction:Transaction = Transaction.new()	
 	add_child(transaction)
+	if "url_override" in transaction and SolanaService != null and SolanaService.active_rpc != "":
+		transaction.url_override = SolanaService.active_rpc
 	transaction.set_payer(payer)
 
 	for idx in range(instructions.size()):
@@ -179,10 +181,15 @@ func sign_transaction_serialized(tx_bytes:PackedByteArray, signer, all_needed_si
 func add_signature(transaction:Transaction,signer) -> Transaction:
 	on_tx_sign_start.emit()
 	
-	transaction.partially_sign([signer])
 	if signer is WalletAdapter:
-		transaction.signer_state_changed.connect(handle_transaction_approve,CONNECT_ONE_SHOT)
-		transaction.signing_failed.connect(handle_transaction_cancel,CONNECT_ONE_SHOT)
+		if not transaction.signer_state_changed.is_connected(handle_transaction_approve):
+			transaction.signer_state_changed.connect(handle_transaction_approve, CONNECT_ONE_SHOT)
+		if not transaction.signing_failed.is_connected(handle_transaction_cancel):
+			transaction.signing_failed.connect(handle_transaction_cancel, CONNECT_ONE_SHOT)
+
+	transaction.partially_sign([signer])
+
+	if signer is WalletAdapter:
 		var confirmed:bool = await on_tx_signed
 		if !confirmed:
 			on_tx_cancelled.emit()
@@ -201,12 +208,15 @@ func force_finish_transaction(transaction_data:TransactionData) -> void:
 	on_tx_finish.emit(transaction_data)
 	
 func update_blockhash(transaction:Transaction) -> Transaction:
+	if "url_override" in transaction and SolanaService != null and SolanaService.active_rpc != "":
+		transaction.url_override = SolanaService.active_rpc
 	transaction.update_latest_blockhash()
 	var response:Dictionary = await transaction.blockhash_updated
-	if response.has("result"):
+	if response.has("result") and response["result"] != null and response["result"].has("value"):
 		tx_blockhash = response["result"]["value"]["blockhash"]
+		print("[TransactionManager] Blockhash fetched: ", tx_blockhash)
 	else:
-		print("Failed To Fetch valid blockhash for transaction")
+		print("[TransactionManager] Failed To Fetch valid blockhash for transaction: ", response)
 		tx_blockhash = ""
 	
 	return transaction
