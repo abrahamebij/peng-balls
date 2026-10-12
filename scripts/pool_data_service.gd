@@ -118,6 +118,9 @@ static func fetch_pools(caller: Node = null, callback: Callable = Callable()) ->
 						for item in list:
 							if item is Dictionary:
 								var round_id: int = int(item.get("roundId", item.get("round_id", 1)))
+								var vault_pk_str: String = str(item.get("vaultPubkey", "sJy3Qfqi2gSZH2PG8jw9FayenmgN5tmwVSjwYLVwEH6"))
+								if vault_pk_str.is_empty() or vault_pk_str == "2G9MvvQTCjFmNn3Bm98ibJ34cCsW2eXEoieWtsRiRnpf":
+									vault_pk_str = "sJy3Qfqi2gSZH2PG8jw9FayenmgN5tmwVSjwYLVwEH6"
 								pools_out.append({
 									"round_id": round_id,
 									"roundId": round_id,
@@ -129,7 +132,7 @@ static func fetch_pools(caller: Node = null, callback: Callable = Callable()) ->
 									"stake": str(item.get("stake", "0.05 SOL")),
 									"entry_fee_lamports": int(item.get("entryFeeLamports", 50000000)),
 									"entryFeeLamports": int(item.get("entryFeeLamports", 50000000)),
-									"vaultPubkey": str(item.get("vaultPubkey", "sJy3Qfqi2gSZH2PG8jw9FayenmgN5tmwVSjwYLVwEH6")),
+									"vaultPubkey": vault_pk_str,
 									"total_pot": str(item.get("totalPotFormatted", item.get("totalPot", "0.00 SOL"))),
 									"totalPot": str(item.get("totalPotFormatted", item.get("totalPot", "0.00 SOL"))),
 									"totalPotFormatted": str(item.get("totalPotFormatted", "0.00 SOL")),

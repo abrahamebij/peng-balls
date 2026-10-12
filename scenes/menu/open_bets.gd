@@ -214,7 +214,9 @@ func _enter_pool_run(pool: Dictionary, action_btn: Button = null) -> void:
 		var solana_service = get_node("/root/SolanaService")
 		if solana_service and solana_service.has_node("TransactionManager"):
 			var tx_mgr = solana_service.get_node("TransactionManager")
-			var vault_addr: String = str(pool.get("vaultPubkey", pool.get("vault_pubkey", "sJy3Qfqi2gSZH2PG8jw9FayenmgN5tmwVSjwYLVwEH6")))
+			var vault_addr: String = str(pool.get("vaultPubkey", pool.get("vault_pubkey", "")))
+			if vault_addr.is_empty() or vault_addr == "2G9MvvQTCjFmNn3Bm98ibJ34cCsW2eXEoieWtsRiRnpf":
+				vault_addr = "sJy3Qfqi2gSZH2PG8jw9FayenmgN5tmwVSjwYLVwEH6"
 			var vault_pk = Pubkey.new_from_string(vault_addr)
 
 			if action_btn:
@@ -245,4 +247,4 @@ func _enter_pool_run(pool: Dictionary, action_btn: Button = null) -> void:
 			get_tree().change_scene_to_file("res://scenes/menu/LoadingScreen.tscn")
 		else:
 			get_tree().change_scene_to_file("res://scenes/game/Game.tscn")
-	)
+	, tx_signature)
