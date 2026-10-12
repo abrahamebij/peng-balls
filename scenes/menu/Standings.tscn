@@ -96,7 +96,7 @@ theme = ExtResource("3_desc")
 theme_override_colors/font_color = Color(0.14117648, 0.1764706, 0.18039216, 1)
 theme_override_fonts/font = ExtResource("4_font")
 theme_override_font_sizes/font_size = 18
-text = "Weekly Sprint Pool — Top 50 Standings"
+text = "Community Pool Standings"
 horizontal_alignment = 1
 
 [node name="PoolDetails" type="Label" parent="PoolBanner" unique_id=409646796]
@@ -104,7 +104,7 @@ layout_mode = 2
 theme = ExtResource("3_desc")
 theme_override_colors/font_color = Color(0.24, 0.28, 0.28, 1)
 theme_override_font_sizes/font_size = 14
-text = "Stake: 0.05 SOL  •  Pot: 14.25 SOL  •  Winner: 12.82 SOL (90%)  •  Time Left: 3d 14h"
+text = "Loading pool details..."
 horizontal_alignment = 1
 
 [node name="TableHeader" type="PanelContainer" parent="." unique_id=409646797]

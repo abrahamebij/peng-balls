@@ -143,6 +143,16 @@ func _end_game(won: bool):
 
 	var status_text = "MAZE COMPLETED!" if won else "CAUGHT BY ENEMY!"
 	message.text = status_text + "\nTime: " + _format_time_precise(time_elapsed)
+
+	if mode == "staked":
+		restart_button.text = "View Results"
+		if restart_button.pressed.is_connected(_on_restart):
+			restart_button.pressed.disconnect(_on_restart)
+		restart_button.pressed.connect(func():
+			get_tree().paused = false
+			get_tree().change_scene_to_file("res://scenes/menu/Result.tscn")
+		)
+
 	end_panel.visible = true
 	get_tree().paused = true    # freeze the game behind the panel
 

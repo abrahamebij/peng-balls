@@ -47,11 +47,11 @@ func _go_back() -> void:
 
 func _render_pool_banner() -> void:
 	pool_name_lbl.text = "%s — Top 50 Standings" % current_pool.get("name", "Community Pool")
-	pool_details_lbl.text = "Stake: %s  •  Pot: %s (Winner Takes 90%%: %s)  •  Time Left: %s" % [
+	var pot_val: String = str(current_pool.get("total_pot", current_pool.get("totalPotFormatted", "0 SOL")))
+	pool_details_lbl.text = "Stake: %s  •  Pot: %s  •  Time Left: %s" % [
 		current_pool.get("stake", "0.05 SOL"),
-		current_pool.get("total_pot", "14.25 SOL"),
-		current_pool.get("winner_cut", "12.82 SOL"),
-		current_pool.get("time_left", "3d 14h")
+		pot_val,
+		current_pool.get("time_left", current_pool.get("timeLeft", "3d 14h"))
 	]
 
 
@@ -66,7 +66,15 @@ func _populate_table() -> void:
 
 	var font_bold = load("res://resources/fonts/Poppins-Bold.ttf")
 
+	# Initial render from distinct round standings
+	var initial_standings = PoolDataService.get_top_50_standings(round_id, user_pubkey)
+	for entry in initial_standings:
+		var row = _create_table_row(entry, font_bold)
+		table_rows_container.add_child(row)
+
 	PoolDataService.fetch_standings(round_id, user_pubkey, self, func(standings: Array[Dictionary]):
+		if not is_instance_valid(table_rows_container) or standings.is_empty():
+			return
 		for child in table_rows_container.get_children():
 			child.queue_free()
 		for entry in standings:

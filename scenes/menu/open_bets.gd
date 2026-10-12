@@ -40,10 +40,22 @@ func _populate_pools() -> void:
 	for child in pools_container.get_children():
 		child.queue_free()
 
+	# Initial render from local cache
 	var pools = PoolDataService.sample_pools
 	for pool in pools:
 		var card = _create_pool_card(pool)
 		pools_container.add_child(card)
+
+	# Asynchronously update from backend
+	PoolDataService.fetch_pools(self, func(live_pools: Array[Dictionary]):
+		if not is_instance_valid(pools_container) or live_pools.is_empty():
+			return
+		for child in pools_container.get_children():
+			child.queue_free()
+		for pool in live_pools:
+			var card = _create_pool_card(pool)
+			pools_container.add_child(card)
+	)
 
 
 func _create_pool_card(pool: Dictionary) -> PanelContainer:
@@ -94,23 +106,24 @@ func _create_pool_card(pool: Dictionary) -> PanelContainer:
 		badge.add_theme_font_override("font", font_bold)
 	title_row.add_child(badge)
 
-	# Stats line
+	# Clean description: only Pot and Leader
 	var stats_lbl = Label.new()
-	stats_lbl.text = "Pot: %s  •  Winner Takes (90%%): %s  •  Runs: %d" % [
-		pool.get("total_pot", "0 SOL"),
-		pool.get("winner_cut", "0 SOL"),
-		pool.get("total_runs", 0)
-	]
-	stats_lbl.add_theme_font_size_override("font_size", 14)
-	stats_lbl.add_theme_color_override("font_color", Color(0.25, 0.30, 0.30, 1.0))
+	var pot_val: String = str(pool.get("total_pot", pool.get("totalPotFormatted", "0 SOL")))
+	stats_lbl.text = "Pot: %s" % pot_val
+	stats_lbl.add_theme_font_size_override("font_size", 15)
+	stats_lbl.add_theme_color_override("font_color", Color(0.18, 0.22, 0.22, 1.0))
+	if font_bold:
+		stats_lbl.add_theme_font_override("font", font_bold)
 	left_vbox.add_child(stats_lbl)
 
 	# Leader & Timer line
 	var leader_lbl = Label.new()
-	leader_lbl.text = "Time Left: %s  •  Current 1st: %s (%s)" % [
-		pool.get("time_left", "--"),
-		pool.get("current_leader", "--"),
-		pool.get("best_time", "--")
+	var leader_val: String = str(pool.get("current_leader", pool.get("currentLeader", "--")))
+	var best_val: String = str(pool.get("best_time", pool.get("bestTimeFormatted", "--")))
+	leader_lbl.text = "Time Left: %s  •  Leader: %s (%s)" % [
+		pool.get("time_left", pool.get("timeLeft", "--")),
+		leader_val,
+		best_val
 	]
 	leader_lbl.add_theme_font_size_override("font_size", 13)
 	leader_lbl.add_theme_color_override("font_color", Color(0.35, 0.40, 0.40, 1.0))
@@ -145,7 +158,7 @@ func _create_pool_card(pool: Dictionary) -> PanelContainer:
 	enter_btn.add_theme_color_override("font_pressed_color", Color(0.14, 0.18, 0.18, 1.0))
 
 	enter_btn.pressed.connect(func():
-		_enter_pool_run(pool)
+		_enter_pool_run(pool, enter_btn)
 	)
 	right_vbox.add_child(enter_btn)
 
@@ -182,20 +195,45 @@ func _open_standings_for_pool(pool: Dictionary) -> void:
 		get_tree().change_scene_to_file("res://scenes/menu/Standings.tscn")
 
 
-func _enter_pool_run(pool: Dictionary) -> void:
+func _enter_pool_run(pool: Dictionary, action_btn: Button = null) -> void:
 	if not has_node("/root/GlobalState"):
 		return
 	var gs = get_node("/root/GlobalState")
 
-	# Verify balance
-	var is_native: bool = pool.get("is_native", pool.get("isNative", true))
 	var fee_lamports: int = pool.get("entry_fee_lamports", pool.get("entryFeeLamports", 50000000))
 	var fee_sol: float = float(fee_lamports) / 1_000_000_000.0
 
-	if is_native and gs.sol_balance < fee_sol:
+	# Balance pre-check
+	if gs.sol_balance < fee_sol and gs.wallet_provider_id != 999:
 		print("[OpenBets] Insufficient SOL balance: %.4f required, user has %.4f" % [fee_sol, gs.sol_balance])
-	elif not is_native and gs.skr_balance < 100.0:
-		print("[OpenBets] Insufficient SKR balance: 100 required, user has %.1f" % gs.skr_balance)
+
+	var tx_signature: String = ""
+
+	# If connected with real Phantom / Solana wallet (not desktop dev bypass), trigger real transaction
+	if gs.wallet_provider_id != 999 and has_node("/root/SolanaService"):
+		var solana_service = get_node("/root/SolanaService")
+		if solana_service and solana_service.has_node("TransactionManager"):
+			var tx_mgr = solana_service.get_node("TransactionManager")
+			var vault_addr: String = str(pool.get("vaultPubkey", pool.get("vault_pubkey", "2G9MvvQTCjFmNn3Bm98ibJ34cCsW2eXEoieWtsRiRnpf")))
+			var vault_pk = Pubkey.new_from_string(vault_addr)
+
+			if action_btn:
+				action_btn.disabled = true
+				action_btn.text = "Approve in Phantom..."
+
+			print("[OpenBets] Triggering Phantom transaction for %.4f SOL to %s" % [fee_sol, vault_addr])
+			var tx_data: TransactionData = await tx_mgr.transfer_sol(vault_pk, fee_sol)
+
+			if action_btn:
+				action_btn.disabled = false
+				action_btn.text = "Enter Run (%s)" % pool.get("stake", "")
+
+			if tx_data == null or not tx_data.is_successful():
+				print("[OpenBets] Transaction was rejected or cancelled in Phantom.")
+				return
+
+			tx_signature = str(tx_data.data.get("result", ""))
+			print("[OpenBets] Phantom transaction confirmed on Devnet! Signature: ", tx_signature)
 
 	# Register run entry with backend
 	PoolDataService.enter_pool(pool, gs.connected_pubkey, self, func(_ok, _msg):

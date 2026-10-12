@@ -52,16 +52,8 @@ func _setup_mode_select_modal():
 
 	if stake_btn:
 		stake_btn.pressed.connect(func():
-			var active_pools = PoolDataService.sample_pools
-			var chosen_idx = pool_option_btn.selected if pool_option_btn else 0
-			if chosen_idx < 0 or chosen_idx >= active_pools.size():
-				chosen_idx = 0
 			mode_select_modal.visible = false
-			if has_node("/root/GlobalState"):
-				var gs = get_node("/root/GlobalState")
-				gs.active_run_mode = "staked"
-				gs.active_run_pool = active_pools[chosen_idx]
-			_launch_game()
+			get_tree().change_scene_to_file("res://scenes/menu/OpenBets.tscn")
 		)
 
 	if cancel_btn:

@@ -134,6 +134,9 @@ func _input(event: InputEvent) -> void:
 func _hook_solana_service() -> void:
 	if has_node("/root/SolanaService"):
 		var solana_service = get_node("/root/SolanaService")
+		if solana_service.has_method("set_rpc_cluster") and "RpcCluster" in solana_service:
+			solana_service.set_rpc_cluster(solana_service.RpcCluster.DEVNET)
+			print("[GlobalState] Configured SolanaService to DEVNET")
 		if solana_service and solana_service.has_node("WalletService"):
 			var wallet_svc = solana_service.get_node("WalletService")
 			if not wallet_svc.on_login_success.is_connected(_on_wallet_login_success):
@@ -237,7 +240,7 @@ func activate_dev_bypass() -> void:
 	wallet_provider_id = 999
 	wallet_provider_name = "Dev Bypass (Chlorine)"
 	sol_balance = 25.50
-	skr_balance = 2500.0
+	skr_balance = 0.0
 	_save_session()
 	
 	wallet_connected.emit(connected_pubkey)
@@ -252,6 +255,8 @@ func fetch_balance() -> void:
 		balance_updated.emit(sol_balance)
 		skr_balance_updated.emit(skr_balance)
 		return
+
+	# 1. Fetch via SolanaService inspector
 	var solana_service = get_node_or_null("/root/SolanaService")
 	if solana_service and solana_service.has_node("AccountInspector"):
 		var inspector = solana_service.get_node("AccountInspector")
@@ -259,25 +264,86 @@ func fetch_balance() -> void:
 			if not inspector.on_balance_loaded.is_connected(_on_balance_loaded):
 				inspector.on_balance_loaded.connect(_on_balance_loaded)
 			inspector.get_account_balance(connected_pubkey)
-	
+
+	# 2. Also direct JSON-RPC query to Devnet for guaranteed real balance
+	_query_devnet_sol_balance(connected_pubkey)
 	fetch_skr_balance()
+
+
+func _query_devnet_sol_balance(pubkey: String) -> void:
+	var http := HTTPRequest.new()
+	http.timeout = 6.0
+	add_child(http)
+	var payload := {
+		"jsonrpc": "2.0",
+		"id": 1,
+		"method": "getBalance",
+		"params": [pubkey, {"commitment": "confirmed"}]
+	}
+	http.request_completed.connect(func(res: int, code: int, _h: PackedStringArray, body: PackedByteArray):
+		if res == HTTPRequest.RESULT_SUCCESS and code == 200:
+			var json = JSON.new()
+			if json.parse(body.get_string_from_utf8()) == OK:
+				var data = json.get_data()
+				if data is Dictionary and data.has("result"):
+					var val = data["result"].get("value", 0)
+					sol_balance = float(val) / 1_000_000_000.0
+					_save_session()
+					balance_updated.emit(sol_balance)
+					print("[GlobalState] Direct Devnet SOL balance: %.4f" % sol_balance)
+		http.queue_free()
+	)
+	var headers := PackedStringArray(["Content-Type: application/json"])
+	http.request("https://api.devnet.solana.com", headers, HTTPClient.METHOD_POST, JSON.stringify(payload))
 
 
 func fetch_skr_balance() -> void:
 	if not is_connected or connected_pubkey.is_empty():
 		return
 	if wallet_provider_id == 999:
+		skr_balance = 0.0
 		skr_balance_updated.emit(skr_balance)
 		return
-	# Default baseline token balance for devnet testing
-	if skr_balance <= 0.0:
-		skr_balance = 250.0
-	skr_balance_updated.emit(skr_balance)
+
+	# Query SPL token accounts on Devnet for real balance
+	var http := HTTPRequest.new()
+	http.timeout = 6.0
+	add_child(http)
+	var payload := {
+		"jsonrpc": "2.0",
+		"id": 2,
+		"method": "getTokenAccountsByOwner",
+		"params": [
+			connected_pubkey,
+			{"programId": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"},
+			{"encoding": "jsonParsed"}
+		]
+	}
+	http.request_completed.connect(func(res: int, code: int, _h: PackedStringArray, body: PackedByteArray):
+		var total_tokens := 0.0
+		if res == HTTPRequest.RESULT_SUCCESS and code == 200:
+			var json = JSON.new()
+			if json.parse(body.get_string_from_utf8()) == OK:
+				var data = json.get_data()
+				if data is Dictionary and data.has("result"):
+					var accounts = data["result"].get("value", [])
+					for acc in accounts:
+						var info = acc.get("account", {}).get("data", {}).get("parsed", {}).get("info", {})
+						var amount_info = info.get("tokenAmount", {})
+						total_tokens += float(amount_info.get("uiAmount", 0.0))
+		skr_balance = total_tokens
+		_save_session()
+		skr_balance_updated.emit(skr_balance)
+		print("[GlobalState] Direct Devnet SKR balance: %.2f" % skr_balance)
+		http.queue_free()
+	)
+	var headers := PackedStringArray(["Content-Type: application/json"])
+	http.request("https://api.devnet.solana.com", headers, HTTPClient.METHOD_POST, JSON.stringify(payload))
 
 
 func _on_balance_loaded(balance_lamports: int) -> void:
 	sol_balance = float(balance_lamports) / 1_000_000_000.0
-	print("[GlobalState] Updated SOL Balance: ", sol_balance)
+	print("[GlobalState] Updated SOL Balance via inspector: ", sol_balance)
 	_save_session()
 	balance_updated.emit(sol_balance)
 

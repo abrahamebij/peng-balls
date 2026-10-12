@@ -110,7 +110,7 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.14, 0.18, 0.18, 1)
 theme_override_fonts/font = ExtResource("4_font")
 theme_override_font_sizes/font_size = 17
-text = "Weekly Sprint Pool (Stake: 0.05 SOL)"
+text = "Game Mode"
 horizontal_alignment = 1
 
 [node name="HSeparator" type="HSeparator" parent="Card/VBox" unique_id=597857592]
