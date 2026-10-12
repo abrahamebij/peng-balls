@@ -59,17 +59,20 @@ func _populate_table() -> void:
 	for child in table_rows_container.get_children():
 		child.queue_free()
 
-	var round_id: int = current_pool.get("round_id", 1)
+	var round_id: int = current_pool.get("round_id", current_pool.get("roundId", 1))
 	var user_pubkey: String = ""
 	if has_node("/root/GlobalState"):
 		user_pubkey = get_node("/root/GlobalState").connected_pubkey
 
-	var standings = PoolDataService.get_top_50_standings(round_id, user_pubkey)
 	var font_bold = load("res://resources/fonts/Poppins-Bold.ttf")
 
-	for entry in standings:
-		var row = _create_table_row(entry, font_bold)
-		table_rows_container.add_child(row)
+	PoolDataService.fetch_standings(round_id, user_pubkey, self, func(standings: Array[Dictionary]):
+		for child in table_rows_container.get_children():
+			child.queue_free()
+		for entry in standings:
+			var row = _create_table_row(entry, font_bold)
+			table_rows_container.add_child(row)
+	)
 
 
 func _create_table_row(entry: Dictionary, font_bold: Font) -> PanelContainer:

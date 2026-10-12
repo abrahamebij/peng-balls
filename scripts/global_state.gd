@@ -7,6 +7,7 @@ signal wallet_connected(pubkey: String)
 signal wallet_disconnected
 signal wallet_connection_failed(error_message: String)
 signal balance_updated(new_balance: float)
+signal skr_balance_updated(new_balance: float)
 
 # Connection state
 var is_connected: bool = false
@@ -15,6 +16,7 @@ var shorthand_pubkey: String = ""
 var wallet_provider_id: int = -1
 var wallet_provider_name: String = ""
 var sol_balance: float = 0.0
+var skr_balance: float = 0.0
 var next_scene_path: String = ""
 var selected_pool: Dictionary = {}
 
@@ -62,7 +64,8 @@ func _save_session() -> void:
 		"wallet_provider_id": wallet_provider_id,
 		"wallet_provider_name": wallet_provider_name,
 		"is_connected": is_connected,
-		"sol_balance": sol_balance
+		"sol_balance": sol_balance,
+		"skr_balance": skr_balance
 	}
 	var file = FileAccess.open(SESSION_SAVE_PATH, FileAccess.WRITE)
 	if file:
@@ -95,6 +98,7 @@ func _load_session() -> bool:
 	wallet_provider_id = data.get("wallet_provider_id", -1)
 	wallet_provider_name = data.get("wallet_provider_name", "Solana Wallet")
 	sol_balance = float(data.get("sol_balance", 0.0))
+	skr_balance = float(data.get("skr_balance", 0.0))
 	is_connected = true
 	print("[GlobalState] Restored saved session: %s (%s)" % [connected_pubkey, wallet_provider_name])
 	
@@ -218,6 +222,7 @@ func disconnect_wallet() -> void:
 	wallet_provider_id = -1
 	wallet_provider_name = ""
 	sol_balance = 0.0
+	skr_balance = 0.0
 	_clear_session()
 	print("[GlobalState] Wallet Disconnected")
 	wallet_disconnected.emit()
@@ -232,10 +237,12 @@ func activate_dev_bypass() -> void:
 	wallet_provider_id = 999
 	wallet_provider_name = "Dev Bypass (Chlorine)"
 	sol_balance = 25.50
+	skr_balance = 2500.0
 	_save_session()
 	
 	wallet_connected.emit(connected_pubkey)
 	balance_updated.emit(sol_balance)
+	skr_balance_updated.emit(skr_balance)
 
 
 func fetch_balance() -> void:
@@ -243,6 +250,7 @@ func fetch_balance() -> void:
 		return
 	if wallet_provider_id == 999:
 		balance_updated.emit(sol_balance)
+		skr_balance_updated.emit(skr_balance)
 		return
 	var solana_service = get_node_or_null("/root/SolanaService")
 	if solana_service and solana_service.has_node("AccountInspector"):
@@ -251,6 +259,20 @@ func fetch_balance() -> void:
 			if not inspector.on_balance_loaded.is_connected(_on_balance_loaded):
 				inspector.on_balance_loaded.connect(_on_balance_loaded)
 			inspector.get_account_balance(connected_pubkey)
+	
+	fetch_skr_balance()
+
+
+func fetch_skr_balance() -> void:
+	if not is_connected or connected_pubkey.is_empty():
+		return
+	if wallet_provider_id == 999:
+		skr_balance_updated.emit(skr_balance)
+		return
+	# Default baseline token balance for devnet testing
+	if skr_balance <= 0.0:
+		skr_balance = 250.0
+	skr_balance_updated.emit(skr_balance)
 
 
 func _on_balance_loaded(balance_lamports: int) -> void:

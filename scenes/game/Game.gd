@@ -122,8 +122,9 @@ func _end_game(won: bool):
 		mode = gs.active_run_mode
 		pool = gs.active_run_pool
 		if mode == "staked" and won and not pool.is_empty():
-			var round_id: int = pool.get("round_id", 1)
+			var round_id: int = pool.get("round_id", pool.get("roundId", 1))
 			rank = PoolDataService.calculate_rank_for_time(round_id, time_ms)
+			PoolDataService.submit_run(round_id, gs.connected_pubkey, time_ms, _format_time_precise(time_elapsed), won, self)
 		
 		gs.last_run_result = {
 			"won": won,

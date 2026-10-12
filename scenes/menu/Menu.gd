@@ -40,14 +40,6 @@ func _setup_mode_select_modal():
 		return
 	mode_select_modal.visible = false
 
-	# Populate pool dropdown
-	if pool_option_btn:
-		pool_option_btn.clear()
-		var pools = PoolDataService.sample_pools
-		for i in range(pools.size()):
-			var p = pools[i]
-			pool_option_btn.add_item("%s (Stake: %s • Pot: %s)" % [p.get("name"), p.get("stake"), p.get("total_pot")], i)
-
 	if play_free_btn:
 		play_free_btn.pressed.connect(func():
 			mode_select_modal.visible = false
@@ -60,15 +52,15 @@ func _setup_mode_select_modal():
 
 	if stake_btn:
 		stake_btn.pressed.connect(func():
-			var pools = PoolDataService.sample_pools
+			var active_pools = PoolDataService.sample_pools
 			var chosen_idx = pool_option_btn.selected if pool_option_btn else 0
-			if chosen_idx < 0 or chosen_idx >= pools.size():
+			if chosen_idx < 0 or chosen_idx >= active_pools.size():
 				chosen_idx = 0
 			mode_select_modal.visible = false
 			if has_node("/root/GlobalState"):
 				var gs = get_node("/root/GlobalState")
 				gs.active_run_mode = "staked"
-				gs.active_run_pool = pools[chosen_idx]
+				gs.active_run_pool = active_pools[chosen_idx]
 			_launch_game()
 		)
 
@@ -76,6 +68,22 @@ func _setup_mode_select_modal():
 		cancel_btn.pressed.connect(func():
 			mode_select_modal.visible = false
 		)
+
+	# Populate pool dropdown
+	_refresh_pool_dropdown()
+	PoolDataService.fetch_pools(self, func(_pools):
+		_refresh_pool_dropdown()
+	)
+
+
+func _refresh_pool_dropdown() -> void:
+	if not pool_option_btn:
+		return
+	pool_option_btn.clear()
+	var current_pools = PoolDataService.sample_pools
+	for i in range(current_pools.size()):
+		var p = current_pools[i]
+		pool_option_btn.add_item("%s (Stake: %s • Pot: %s)" % [p.get("name"), p.get("stake"), p.get("total_pot", p.get("totalPot", ""))], i)
 
 
 func _on_start():

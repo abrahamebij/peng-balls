@@ -19,6 +19,7 @@ func _ready() -> void:
 			return
 		
 		gs.balance_updated.connect(_on_balance_updated)
+		gs.skr_balance_updated.connect(_on_skr_balance_updated)
 		gs.wallet_disconnected.connect(_on_wallet_disconnected)
 		_refresh_account_data()
 	
@@ -47,15 +48,23 @@ func _refresh_account_data() -> void:
 	
 	if gs.is_connected:
 		address_value.text = gs.shorthand_pubkey if not gs.shorthand_pubkey.is_empty() else gs.connected_pubkey
-		balance_value.text = "%.4f SOL" % gs.sol_balance
+		balance_value.text = "%.4f SOL  •  %.0f SKR" % [gs.sol_balance, gs.skr_balance]
 		gs.fetch_balance()
 	else:
 		address_value.text = "Not Connected"
-		balance_value.text = "-- SOL"
+		balance_value.text = "-- SOL  •  -- SKR"
 
 
 func _on_balance_updated(new_balance: float) -> void:
-	balance_value.text = "%.4f SOL" % new_balance
+	if has_node("/root/GlobalState"):
+		var gs = get_node("/root/GlobalState")
+		balance_value.text = "%.4f SOL  •  %.0f SKR" % [new_balance, gs.skr_balance]
+
+
+func _on_skr_balance_updated(new_skr: float) -> void:
+	if has_node("/root/GlobalState"):
+		var gs = get_node("/root/GlobalState")
+		balance_value.text = "%.4f SOL  •  %.0f SKR" % [gs.sol_balance, new_skr]
 
 
 func _on_copy_pressed() -> void:

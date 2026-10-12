@@ -16,6 +16,9 @@ func _ready() -> void:
 		back_btn.pressed.connect(_go_back)
 
 	_populate_pools()
+	PoolDataService.fetch_pools(self, func(_pools):
+		_populate_pools()
+	)
 
 
 func _notification(what: int) -> void:
@@ -180,12 +183,28 @@ func _open_standings_for_pool(pool: Dictionary) -> void:
 
 
 func _enter_pool_run(pool: Dictionary) -> void:
-	if has_node("/root/GlobalState"):
-		var gs = get_node("/root/GlobalState")
+	if not has_node("/root/GlobalState"):
+		return
+	var gs = get_node("/root/GlobalState")
+
+	# Verify balance
+	var is_native: bool = pool.get("is_native", pool.get("isNative", true))
+	var fee_lamports: int = pool.get("entry_fee_lamports", pool.get("entryFeeLamports", 50000000))
+	var fee_sol: float = float(fee_lamports) / 1_000_000_000.0
+
+	if is_native and gs.sol_balance < fee_sol:
+		print("[OpenBets] Insufficient SOL balance: %.4f required, user has %.4f" % [fee_sol, gs.sol_balance])
+	elif not is_native and gs.skr_balance < 100.0:
+		print("[OpenBets] Insufficient SKR balance: 100 required, user has %.1f" % gs.skr_balance)
+
+	# Register run entry with backend
+	PoolDataService.enter_pool(pool, gs.connected_pubkey, self, func(_ok, _msg):
 		gs.active_run_mode = "staked"
 		gs.active_run_pool = pool
 		gs.next_scene_path = "res://scenes/game/Game.tscn"
-	if ResourceLoader.exists("res://scenes/menu/LoadingScreen.tscn"):
-		get_tree().change_scene_to_file("res://scenes/menu/LoadingScreen.tscn")
-	else:
-		get_tree().change_scene_to_file("res://scenes/game/Game.tscn")
+
+		if ResourceLoader.exists("res://scenes/menu/LoadingScreen.tscn"):
+			get_tree().change_scene_to_file("res://scenes/menu/LoadingScreen.tscn")
+		else:
+			get_tree().change_scene_to_file("res://scenes/game/Game.tscn")
+	)
